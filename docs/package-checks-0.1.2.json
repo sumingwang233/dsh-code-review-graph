@@ -1,0 +1,54 @@
+{
+  "package": "dsh-code-review-graph",
+  "version": "0.1.2",
+  "artifact": "dsh-code-review-graph-0.1.2.tgz",
+  "bytes": 79026,
+  "sha256": "460798993140739f1ab24ce7d63489b6edddfd36b89da6ce5db166b177be4d62",
+  "integrity": "sha512-o1dwFwR/Miur89ecsJbooEPSYSg3K+oSSkJ50LoY6zJvMVn11WurgqM2spJerFVUP9c3rAoKX9FpVudrsIGBLw==",
+  "sourceCommit": "df3e921471d83fbce6e189cca14573e87188062b",
+  "engineCommit": "9eba19ffaa60fda02a459a844067e5c190c9013d",
+  "localPlatform": "win32",
+  "node": "24.14.1",
+  "local": {
+    "typecheckBuild": "passed",
+    "unitTests": 5,
+    "backendTests": 3,
+    "setupTests": 2,
+    "dshReleases": ["0.1.5-rc.2", "0.2.0-rc.2"],
+    "nativeCommandsRealEngine": "passed on both releases",
+    "browserGenerationFailureCancelRetry": "passed on both readers",
+    "webHeadlessLifecycle": "passed on both releases",
+    "coreInstallerTests": "8 passed; ruff passed",
+    "modelInference": "not run",
+    "reportedPnpmTimeout": "not reproduced"
+  },
+  "desktop": {
+    "release": "0.2.0-rc.2",
+    "platform": "win32",
+    "actualApplication": true,
+    "clean": "passed",
+    "dependencyCombination": "passed; three pre-existing plugins and settings retained",
+    "firstUseEngineSetupViaNativeButton": true,
+    "generationSearchHtmlExport": "passed",
+    "otherPlatformsReleases": "not run as complete applications"
+  },
+  "ci": {
+    "adapterRun": "https://github.com/sumingwang233/dsh-code-review-graph/actions/runs/37750329235",
+    "coreRun": "https://github.com/sumingwang233/code-review-graph/actions/runs/37750534499",
+    "status": "passed",
+    "adapterJobs": "all 6 Windows/Linux/macOS x both DSH releases passed",
+    "coreJobs": "all 3 OS jobs passed"
+  },
+  "githubRelease": {
+    "url": "https://github.com/sumingwang233/dsh-code-review-graph/releases/tag/v0.1.2",
+    "downloadedArtifactSha256Verified": true
+  },
+  "npm": {
+    "status": "published and downloaded artifact verified",
+    "registry": "https://registry.npmjs.org",
+    "latest": "0.1.2",
+    "publishedAt": "2026-10-08T08:42:08.359Z",
+    "downloadedArtifactSha256Verified": true,
+    "integrityVerified": true
+  }
+}
