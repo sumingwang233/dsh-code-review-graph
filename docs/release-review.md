@@ -3,8 +3,11 @@
 上游平台请求已提交：[CRG #1100](https://github.com/tirth8205/code-review-graph/issues/1100)。
 已创建并推送[公开适配仓库](https://github.com/sumingwang233/dsh-code-review-graph)及
 [公开引擎贡献分支](https://github.com/sumingwang233/code-review-graph/tree/feat/dsh-integration)。
-插件六个 OS/DSH 组合及引擎三个 OS CI 作业均已通过。npm 发布被服务器以 E403
-拒绝，正在等待账户完成 2FA 设置；发布成功后提交上游正式 PR。
+插件六个 OS/DSH 组合及引擎三个 OS CI 作业均已通过。
+[npm 0.1.0](https://www.npmjs.com/package/dsh-code-review-graph/v/0.1.0) 已公开发布；
+下载的发行包与本地最终安装包的 SHA-256/SHA-512 均一致。
+[上游正式 PR #1101](https://github.com/tirth8205/code-review-graph/pull/1101) 已提交至
+`staging`，已关联当前聊天，等待维护者评审。
 
 ## 可审阅内容
 

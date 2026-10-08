@@ -12,6 +12,18 @@
     "0.1.5-rc.2",
     "0.2.0-rc.2"
   ],
+  "npm": {
+    "url": "https://www.npmjs.com/package/dsh-code-review-graph/v/0.1.0",
+    "publishedVersion": "0.1.0",
+    "latest": "0.1.0",
+    "downloadedArtifactSha256Verified": true,
+    "registryIntegritySha512Verified": true
+  },
+  "upstreamPr": {
+    "url": "https://github.com/tirth8205/code-review-graph/pull/1101",
+    "base": "staging",
+    "draft": false
+  },
   "remoteCi": {
     "adapter": {
       "url": "https://github.com/sumingwang233/dsh-code-review-graph/actions/runs/37716247823",
