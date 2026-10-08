@@ -44,6 +44,7 @@ jobs:
           if [[ "$RUNNER_OS" == "Windows" ]]; then
             ENGINE_PYTHON="$PWD/.cache/engine/Scripts/python.exe"
             ENGINE_COMMAND="$PWD/.cache/engine/Scripts/code-review-graph.exe"
+            ENGINE_COMMAND=$(cygpath -w "$ENGINE_COMMAND")
           else
             ENGINE_PYTHON="$PWD/.cache/engine/bin/python"
             ENGINE_COMMAND="$PWD/.cache/engine/bin/code-review-graph"
