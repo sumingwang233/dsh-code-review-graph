@@ -4,7 +4,7 @@ Local checkpoint: **2026-10-08**, Windows, Node **24.14.1**, Python **3.11.16**.
 CRG base **2.3.9**; exact contribution engine commit is in `engine.json`.
 DSH packages are the real published releases **0.1.5-rc.2** and **0.2.0-rc.2**.
 
-Windows 本地验证已通过下列项目；Linux/macOS 的远程 CI 尚未运行。桌面版已检查
+Windows 本地验证及 Windows/Linux/macOS 的远程 CI 均已通过。桌面版已检查
 原生插件 ownership 规则及共享 Client 图谱组件，**尚未启动 Electron 应用进行整机实测**。
 这些范围不同，不能把组件测试描述为桌面整机验收。未运行真实模型推理。
 
@@ -22,21 +22,25 @@ Windows 本地验证已通过下列项目；Linux/macOS 的远程 CI 尚未运�
 | Explicit dependency preparation | Passed | Isolated real engine, read-only plan API probe, repeat preparation without package installation |
 | Core Python regression set | 805 passed, 4 skipped | All changed platform/refactor/renderer/source-fence areas and their related regressions |
 | Ruff for changed Python sources/tests | Passed | All modified Python files |
-| Linux/macOS and remote matrix | Pending | Prepared six-job matrix; remote publication requires approval |
+| Windows/Linux/macOS × both DSH releases | 6 CI jobs passed | Real pinned engine, isolated native installation, session calls, browser graph and explicit setup |
+| Core Windows/Linux/macOS regression matrix | 3 CI jobs passed | 808 passed, 1 platform-specific skip on each OS |
 | Electron application launch | Not run | Native shared Client contribution and ownership are covered separately |
 | Real model inference | Not run | Deterministic automation only, no paid inference jobs |
 
-The four core skips are existing symlink checks requiring Windows privileges:
-one graph-path case, one uninstall case, and two watcher cases. The plugin's
-directory-junction escape checks **did run and pass** without those privileges.
+The four local core skips comprise three existing symlink checks requiring
+Windows privileges (one uninstall case and two watcher cases) and a POSIX
+executable-bit check. The plugin's directory-junction escape checks **did run
+and pass** without those privileges. CI runners have symlink privileges: their
+one skip is the POSIX executable-bit check on Windows, or the native Windows
+path-semantics check on Linux/macOS.
 SVG export passed with the explicitly prepared `[eval]` dependency set. Actual
 embedding model inference is not included; optional dependencies/models must be
 prepared explicitly.
 
 ## Session evidence
 
-- [DSH 0.1.5-rc.2 transcript](evidence/session-0.1.5-rc.2-win32.json)
-- [DSH 0.2.0-rc.2 transcript](evidence/session-0.2.0-rc.2-win32.json)
+- [DSH 0.1.5-rc.2 transcript](https://github.com/sumingwang233/dsh-code-review-graph/blob/main/docs/evidence/session-0.1.5-rc.2-win32.json)
+- [DSH 0.2.0-rc.2 transcript](https://github.com/sumingwang233/dsh-code-review-graph/blob/main/docs/evidence/session-0.2.0-rc.2-win32.json)
 
 The test uses actual released Cordis, Session, AgentRegistry, ToolRuntime,
 filesystem and session-policy packages; its Agents are created deterministically
@@ -81,9 +85,9 @@ npm run test:setup
 ```
 
 Provide `DSH_VERSION` and `CRG_COMMAND` in the **test child process environment**.
-`CRG_COMMAND` points to a prepared real engine. Before the fork is publicly
-pushed, setup tests use a local `CRG_SOURCE` override; normal installation after
-release uses the exact source in `engine.json`. Test profiles use temporary
+`CRG_COMMAND` points to a prepared real engine. Setup tests and normal
+installation use the publicly available exact source in `engine.json`.
+Test profiles use temporary
 `DSH_HOME` values and never modify the user's DSH profiles or credentials.
 
 Core regression command:
@@ -95,6 +99,15 @@ python -X utf8 -m pytest tests/test_cli_install.py tests/test_dsh.py tests/test_
 The adapter's `.github/workflows/ci.yml` runs both exact releases on Windows,
 Linux and macOS using a real pinned engine, isolated profile lifecycle, browser
 checks and dependency preparation. The core's `dsh-platform.yml` runs the Python
-contract/regression set on the same three OS families. Neither workflow has run
-remotely at this checkpoint. Before npm publication, push the approved source,
-run both matrices, fix failures, and record their links and results here.
+contract/regression set on the same three OS families.
+
+- [Adapter CI: all six combinations passed](https://github.com/sumingwang233/dsh-code-review-graph/actions/runs/37716247823), source `9c478191b743ecc443cc0eede5d67927a367d7ed`.
+- [Core CI: all three OS jobs passed](https://github.com/sumingwang233/code-review-graph/actions/runs/37717599685), source `8ac789138463cd3b8282688bb94d682e90ca1df3`.
+
+Each adapter CI artifact contains its native session transcript, browser report,
+profile lifecycle report and tested package. Windows records 52 calls per
+release; Linux/macOS record 53. Each transcript contains nine expected refusals.
+Browser reports have zero external requests and page errors. The pinned engine
+commit `9eba19ffaa60fda02a459a844067e5c190c9013d` has identical Python production
+code and dependency metadata to the tested core head; later commits only adjust
+CI and resolve the existing Bash regression test's executable path on Windows.

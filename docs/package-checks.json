@@ -2,9 +2,9 @@
   "package": "dsh-code-review-graph",
   "version": "0.1.0",
   "artifact": "dsh-code-review-graph-0.1.0.tgz",
-  "bytes": 60171,
-  "sha256": "e61f4a8489ad86c3e244c5423efd768ab140cb246de75eac489b1cbca2149413",
-  "sha512": "317uurSTf/r1WRKeQN4ZQv1T8c47DEBe03/LWQ3jKVmBaeJt6E5RDrNjgZgkG8vnWG5DLY5M5S8aYHRQ74tChg==",
+  "bytes": 60558,
+  "sha256": "bc0eac52720ffccfbbff89a7595fe5e80f9d170fe1480569021b7f2ac18ed201",
+  "sha512": "A0wPqVSy+rvXj2hMglnV46MVua41YLY3niVwRkX/dBcv9drGpIrh2ollZZRoHeUEl/nzWDvEnkxBkOHMeDyLDA==",
   "engineCommit": "9eba19ffaa60fda02a459a844067e5c190c9013d",
   "localPlatform": "win32",
   "node": "24.14.1",
@@ -12,5 +12,19 @@
     "0.1.5-rc.2",
     "0.2.0-rc.2"
   ],
-  "remoteCi": "not run - pending publication approval"
+  "remoteCi": {
+    "adapter": {
+      "url": "https://github.com/sumingwang233/dsh-code-review-graph/actions/runs/37716247823",
+      "head": "9c478191b743ecc443cc0eede5d67927a367d7ed",
+      "result": "passed",
+      "jobs": 6
+    },
+    "core": {
+      "url": "https://github.com/sumingwang233/code-review-graph/actions/runs/37717599685",
+      "head": "8ac789138463cd3b8282688bb94d682e90ca1df3",
+      "result": "passed",
+      "jobs": 3,
+      "perOs": { "passed": 808, "platformSpecificSkipped": 1 }
+    }
+  }
 }

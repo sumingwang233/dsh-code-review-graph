@@ -1,7 +1,10 @@
 # 0.1.0 发行审阅检查点
 
 上游平台请求已提交：[CRG #1100](https://github.com/tirth8205/code-review-graph/issues/1100)。
-当前交付为本地可审阅实现与安装包，尚未创建远程适配仓库、推送贡献分支、发布 npm 或提交 PR。
+已创建并推送[公开适配仓库](https://github.com/sumingwang233/dsh-code-review-graph)及
+[公开引擎贡献分支](https://github.com/sumingwang233/code-review-graph/tree/feat/dsh-integration)。
+插件六个 OS/DSH 组合及引擎三个 OS CI 作业均已通过。npm 发布被服务器以 E403
+拒绝，正在等待账户完成 2FA 设置；发布成功后提交上游正式 PR。
 
 ## 可审阅内容
 
@@ -18,22 +21,14 @@
 
 本地已验证两版真实 DSH 的 Session/AgentRegistry/ToolRuntime 与真实 CRG 引擎；
 每版保留 52 次调用记录，其中 9 次是预期的权限或边界拒绝。Python 回归集 805 项通过，
-4 项因 Windows 符号链接权限跳过。图谱组件、原生 Web/headless 安装生命周期、依赖准备、
+4 项因 Windows 符号链接权限或 POSIX 执行位检查跳过。图谱组件、原生 Web/headless 安装生命周期、依赖准备、
 重构哈希检查与 BOM/CRLF 保留均已通过。npm 依赖审计未报告漏洞。
 
-Linux/macOS 的 CI 尚待授权后运行。浏览器测试挂载了原生 Web/Desktop 共享 Client，
+[插件 CI](https://github.com/sumingwang233/dsh-code-review-graph/actions/runs/37716247823)六项通过；
+[引擎 CI](https://github.com/sumingwang233/code-review-graph/actions/runs/37717599685)三个系统各有
+808 项通过、1 项按平台跳过。浏览器测试挂载了原生 Web/Desktop 共享 Client，
 但尚未启动完整 DSH Web 服务或 Electron 桌面应用。实际模型及向量模型推理未运行。
 这些是当前证据的限制；不能将组件和协议测试描述为整机或真实模型验收。
 
-## 待集中授权的远程操作
-
-1. 创建公开仓库 `sumingwang233/dsh-code-review-graph`，推送 `main`。
-2. 创建或复用公开贡献 fork `sumingwang233/code-review-graph`，推送 `feat/dsh-integration`，
-   使锁定的引擎提交可公开下载。
-3. 运行插件的六个 OS/DSH 组合及上游的三个 OS CI 作业；失败时修复并重跑。
-4. 确认两组 CI 全部通过及公开引擎源可安装后，发布 npm `dsh-code-review-graph@0.1.0`。
-5. 向原项目 `staging` 创建正式 PR，关联 #1100、CI 链接和验证证据，并附加到本聊天。
-
-远程确认依据是你提供的 `AGENTS.md` 及已批准执行计划的第 3、4 步。
-CI 失败时暂停 npm 发布。若上游认为确定性会话证据不足，应按其评审意见补充，不能预先
-声称满足其贡献证据要求。
+完整源码、安装包校验与真实发行版会话证据均可审阅。是否满足平台贡献的证据要求由
+上游维护者评审决定。

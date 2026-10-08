@@ -31,6 +31,9 @@ the exact DSH releases 0.1.5-rc.2 and 0.2.0-rc.2.
 - Keep offline D3 rendering valid on Windows checkouts. Disable line-ending
   conversion for the vendored asset and accept normalized CRLF bytes only when
   the original pinned integrity hash verifies.
+- Resolve the existing shell regression test's Bash executable through PATH
+  before spawning it, so Windows does not select its System32 WSL launcher.
+  Keep the full large-input assertion; no failure is skipped.
 
 Validation records and release-tagged session transcripts are in the adapter's
 `docs/validation.md` and `docs/evidence/`. They use actual released DSH
@@ -44,8 +47,16 @@ Local checks cover native lifecycle, idempotence, malformed configuration,
 desktop ownership, all 30 tools/five prompts/seven skills, incremental workers,
 authorized cross-repository search, path boundaries, stale edit plans, permission
 denial, BOM/CRLF writes, partial-failure recovery, and offline graph interaction.
-The prepared GitHub Actions matrices cover Windows/Linux/macOS and both exact
-DSH releases; link their completed runs here before submitting this PR.
+Completed GitHub Actions matrices:
+
+- [Adapter: all six Windows/Linux/macOS × DSH combinations passed](https://github.com/sumingwang233/dsh-code-review-graph/actions/runs/37716247823).
+- [Core: all three OS jobs passed](https://github.com/sumingwang233/code-review-graph/actions/runs/37717599685), each with 808 passed and one platform-specific skip.
+
+Adapter artifacts retain transcripts, browser/lifecycle reports and the tested
+packages. The adapter's pinned engine commit has identical production code and
+dependency metadata to the core CI head; later changes only affect CI/test
+executable resolution. Full Web-server and Electron application launches,
+actual language-model and embedding-model inference were not run.
 
 See `docs/DSH.md` for installation, ownership and the edit-plan contract. Until
 this API is released officially, the adapter pins an exact public contribution
