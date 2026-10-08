@@ -1,0 +1,39 @@
+{
+  "name": "dsh-code-review-graph",
+  "version": "0.1.0",
+  "description": "Local code intelligence, review workflows and interactive graphs for DeepSeek Harness",
+  "type": "module",
+  "license": "MIT",
+  "repository": "github:sumingwang233/dsh-code-review-graph",
+  "engines": { "node": ">=22.19" },
+  "exports": { ".": "./dist/index.js", "./client": "./dist/client.js", "./package.json": "./package.json" },
+  "bin": { "dsh-crg": "./dist/setup.js" },
+  "files": ["dist", "cordis.patch.yml", "engine.json", "capabilities.json", "skills", "LICENSE", "NOTICE", "README.md", "README.en.md", "docs/capabilities.md", "docs/validation.md"],
+  "dsh": { "bundle": { "patch": "./cordis.patch.yml" }, "client": { "platform": "web", "inject": ["@deepseek-ai/dsh-api-workspace-files", "@deepseek-ai/dsh-client-ui-sidebar-right", "@deepseek-ai/dsh-api-remotes"] } },
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "typecheck": "tsc --noEmit",
+    "test": "node --test tests/*.test.mjs",
+    "test:integration": "node --test tests/integration.mjs",
+    "test:browser": "node --test tests/browser.mjs",
+    "test:install": "node --test tests/install.mjs",
+    "test:setup": "node --test tests/setup.mjs",
+    "test:backend": "node --test tests/backend.mjs",
+    "prepare:tests": "node scripts/prepare-test-runtime.mjs",
+    "prepack": "npm run typecheck && npm run build"
+  },
+  "dependencies": { "@modelcontextprotocol/sdk": "1.32.1", "ajv": "8.20.0" },
+  "peerDependencies": { "@deepseek-ai/cordis": "^4.0.0", "@deepseek-ai/schemastery": "^3.18.0", "react": "^18.2.0" },
+  "devDependencies": {
+    "@deepseek-ai/cordis": "4.0.4", "@deepseek-ai/schemastery": "3.18.4",
+    "@deepseek-ai/dsh-tools": "0.2.0-rc.2", "@deepseek-ai/dsh-agent": "0.2.0-rc.2",
+    "@deepseek-ai/dsh-session": "0.2.0-rc.2", "@deepseek-ai/dsh-fs": "0.2.0-rc.2",
+    "@deepseek-ai/dsh-sandbox-policy": "0.2.0-rc.2", "@deepseek-ai/dsh-skill": "0.2.0-rc.2",
+    "@deepseek-ai/dsh-system-prompt": "0.2.0-rc.2",
+    "@deepseek-ai/dsh-client-ui-sidebar-right": "0.2.0-rc.2", "@deepseek-ai/dsh-client-ui-slots": "0.2.0-rc.2", "@deepseek-ai/dsh-client-ui-renderer": "0.2.0-rc.2",
+    "@deepseek-ai/dsh-api-remotes": "0.2.0-rc.2", "@deepseek-ai/dsh-client-ui-session": "0.2.0-rc.2",
+    "@deepseek-ai/dsh-api-workspace-files": "0.2.0-rc.2",
+    "@types/node": "^24.0.0", "@types/react": "^18.3.0", "react": "18.3.1", "react-dom": "18.3.1",
+    "typescript": "^5.9.0", "esbuild": "^0.25.0", "@playwright/test": "^1.55.0"
+  }
+}

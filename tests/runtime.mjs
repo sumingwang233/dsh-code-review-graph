@@ -1,0 +1,10 @@
+import { createRequire } from 'node:module';
+import { resolve } from 'node:path';
+import { pathToFileURL } from 'node:url';
+import { readFileSync } from 'node:fs';
+export const version = process.env.DSH_VERSION ?? '0.2.0-rc.2';
+export const runtimeRoot = process.env.DSH_PACKAGE_DIR ?? resolve('.cache', `dsh-${version}`, 'node_modules/@deepseek-ai/dsh');
+const require = createRequire(resolve(runtimeRoot, 'package.json'));
+export const load = name => import(pathToFileURL(require.resolve(`@deepseek-ai/${name}`)).href);
+const manifest = JSON.parse(readFileSync(resolve(runtimeRoot, 'package.json'), 'utf8'));
+export const cli = resolve(runtimeRoot, typeof manifest.bin === 'string' ? manifest.bin : manifest.bin.dsh);

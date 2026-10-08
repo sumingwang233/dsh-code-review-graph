@@ -1,0 +1,16 @@
+{
+  "package": "dsh-code-review-graph",
+  "version": "0.1.0",
+  "artifact": "dsh-code-review-graph-0.1.0.tgz",
+  "bytes": 60171,
+  "sha256": "e61f4a8489ad86c3e244c5423efd768ab140cb246de75eac489b1cbca2149413",
+  "sha512": "317uurSTf/r1WRKeQN4ZQv1T8c47DEBe03/LWQ3jKVmBaeJt6E5RDrNjgZgkG8vnWG5DLY5M5S8aYHRQ74tChg==",
+  "engineCommit": "9eba19ffaa60fda02a459a844067e5c190c9013d",
+  "localPlatform": "win32",
+  "node": "24.14.1",
+  "nativeInstallReinstallRemove": [
+    "0.1.5-rc.2",
+    "0.2.0-rc.2"
+  ],
+  "remoteCi": "not run - pending publication approval"
+}

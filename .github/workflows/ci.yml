@@ -1,0 +1,66 @@
+name: Native DSH compatibility
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  compatibility:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        dsh: ['0.1.5-rc.2', '0.2.0-rc.2']
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 25
+    env:
+      DSH_VERSION: ${{ matrix.dsh }}
+      HF_HUB_OFFLINE: '1'
+      TRANSFORMERS_OFFLINE: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - uses: pnpm/action-setup@v4
+        with:
+          version: '10'
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: '3.11'
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm run build
+      - run: npm test
+      - run: npm run prepare:tests
+      - name: Prepare real pinned engine
+        shell: bash
+        run: |
+          uv venv .cache/engine --python 3.11
+          ENGINE_SOURCE=$(node --input-type=module -e "import fs from 'node:fs'; process.stdout.write(JSON.parse(fs.readFileSync('engine.json')).source.replace('code-review-graph @', 'code-review-graph[eval] @'))")
+          if [[ "$RUNNER_OS" == "Windows" ]]; then
+            ENGINE_PYTHON="$PWD/.cache/engine/Scripts/python.exe"
+            ENGINE_COMMAND="$PWD/.cache/engine/Scripts/code-review-graph.exe"
+          else
+            ENGINE_PYTHON="$PWD/.cache/engine/bin/python"
+            ENGINE_COMMAND="$PWD/.cache/engine/bin/code-review-graph"
+          fi
+          uv pip install --python "$ENGINE_PYTHON" "$ENGINE_SOURCE"
+          echo "CRG_COMMAND=$ENGINE_COMMAND" >> "$GITHUB_ENV"
+      - run: npm run test:backend
+      - run: npm run test:integration
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:browser
+      - run: npm pack
+      - run: npm run test:install
+      - run: npm run test:setup
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: evidence-${{ matrix.os }}-${{ matrix.dsh }}
+          path: |
+            test-results/
+            dsh-code-review-graph-0.1.0.tgz

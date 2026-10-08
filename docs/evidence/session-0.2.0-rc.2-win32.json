@@ -1,0 +1,1880 @@
+{
+  "release": "0.2.0-rc.2",
+  "platform": "win32",
+  "execution": "Deterministic ToolRuntime.execute; real Session/AgentRegistry and CRG engine; no model inference",
+  "calls": [
+    {
+      "agent": "session-a",
+      "name": "mcp__code_review_graph__list_graph_stats_tool",
+      "args": {},
+      "result": {
+        "isError": true,
+        "error": {
+          "message": "unknown tool \"mcp__code_review_graph__list_graph_stats_tool\"",
+          "info": {
+            "name": "ToolNotFoundError",
+            "code": "UNKNOWN_TOOL"
+          }
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Error: unknown tool \"mcp__code_review_graph__list_graph_stats_tool\""
+          }
+        ]
+      }
+    },
+    {
+      "agent": "session-a",
+      "name": "crg_workflow",
+      "args": {
+        "workflow": "context"
+      },
+      "result": {
+        "isError": false,
+        "value": {
+          "tools": [
+            "mcp__code_review_graph__build_or_update_graph_tool",
+            "mcp__code_review_graph__get_minimal_context_tool",
+            "mcp__code_review_graph__query_graph_tool",
+            "mcp__code_review_graph__semantic_search_nodes_tool",
+            "mcp__code_review_graph__list_graph_stats_tool",
+            "mcp__code_review_graph__get_docs_section_tool"
+          ]
+        }
+      }
+    },
+    {
+      "agent": "session-b",
+      "name": "mcp__code_review_graph__list_graph_stats_tool",
+      "args": {},
+      "result": {
+        "isError": true,
+        "error": {
+          "message": "unknown tool \"mcp__code_review_graph__list_graph_stats_tool\"",
+          "info": {
+            "name": "ToolNotFoundError",
+            "code": "UNKNOWN_TOOL"
+          }
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Error: unknown tool \"mcp__code_review_graph__list_graph_stats_tool\""
+          }
+        ]
+      }
+    },
+    {
+      "agent": "session-a",
+      "name": "mcp__code_review_graph__list_graph_stats_tool",
+      "args": {},
+      "result": {
+        "isError": false,
+        "value": {
+          "status": "ok",
+          "summary": "Graph statistics for repo:\n  Files: 1\n  Total nodes: 3\n  Total edges: 3\n  Languages: python\n  Last updated: 2026-10-08T09:47:47\n\nNodes by kind:\n  File: 1\n  Function: 2\n\nEdges by kind:\n  CALLS: 1\n  CONTAINS: 2\n\nCALLS by target resolution: 1 direct, 0 unresolved\n\nEmbeddings: 0 nodes embedded\n  (install sentence-transformers for semantic search)",
+          "total_nodes": 3,
+          "total_edges": 3,
+          "nodes_by_kind": {
+            "File": 1,
+            "Function": 2
+          },
+          "edges_by_kind": {
+            "CALLS": 1,
+            "CONTAINS": 2
+          },
+          "calls_by_resolution": {
+            "direct": 1,
+            "unresolved": 0
+          },
+          "languages": [
+            "python"
+          ],
+          "files_count": 1,
+          "last_updated": "2026-10-08T09:47:47",
+          "embeddings_count": 0,
+          "_graph": {
+            "updated_at": "2026-10-08T09:47:47",
+            "age_seconds": 0,
+            "built_at_sha": "6520a6afbc9311986f75e0cbc54a78c2fa7df8f1",
+            "built_on_branch": "master",
+            "head_sha": "6520a6afbc9311986f75e0cbc54a78c2fa7df8f1",
+            "head_matches_build": true
+          }
+        }
+      }
+    },
+    {
+      "agent": "session-a",
+      "name": "crg_workflow",
+      "args": {
+        "workflow": "advanced"
+      },
+      "result": {
+        "isError": false,
+        "value": {
+          "tools": [
+            "mcp__code_review_graph__build_or_update_graph_tool",
+            "mcp__code_review_graph__run_postprocess_tool",
+            "mcp__code_review_graph__get_minimal_context_tool",
+            "mcp__code_review_graph__query_graph_tool",
+            "mcp__code_review_graph__semantic_search_nodes_tool",
+            "mcp__code_review_graph__embed_graph_tool",
+            "mcp__code_review_graph__list_graph_stats_tool",
+            "mcp__code_review_graph__get_docs_section_tool",
+            "mcp__code_review_graph__find_large_functions_tool",
+            "mcp__code_review_graph__list_flows_tool",
+            "mcp__code_review_graph__get_flow_tool",
+            "mcp__code_review_graph__list_communities_tool",
+            "mcp__code_review_graph__get_community_tool",
+            "mcp__code_review_graph__get_architecture_overview_tool",
+            "mcp__code_review_graph__detect_changes_tool",
+            "mcp__code_review_graph__get_hub_nodes_tool",
+            "mcp__code_review_graph__get_bridge_nodes_tool",
+            "mcp__code_review_graph__get_knowledge_gaps_tool",
+            "mcp__code_review_graph__get_surprising_connections_tool",
+            "mcp__code_review_graph__get_suggested_questions_tool",
+            "mcp__code_review_graph__traverse_graph_tool",
+            "mcp__code_review_graph__list_repos_tool",
+            "mcp__code_review_graph__cross_repo_search_tool"
+          ]
+        }
+      }
+    },
+    {
+      "agent": "session-a",
+      "name": "crg_workflow",
+      "args": {
+        "workflow": "review"
+      },
+      "result": {
+        "isError": false,
+        "value": {
+          "tools": [
+            "mcp__code_review_graph__build_or_update_graph_tool",
+            "mcp__code_review_graph__get_minimal_context_tool",
+            "mcp__code_review_graph__get_impact_radius_tool",
+            "mcp__code_review_graph__query_graph_tool",
+            "mcp__code_review_graph__get_review_context_tool",
+            "mcp__code_review_graph__semantic_search_nodes_tool",
+            "mcp__code_review_graph__list_graph_stats_tool",
+            "mcp__code_review_graph__get_docs_section_tool",
+            "mcp__code_review_graph__list_flows_tool",
+            "mcp__code_review_graph__get_flow_tool",
+            "mcp__code_review_graph__get_affected_flows_tool",
+            "mcp__code_review_graph__list_communities_tool",
+            "mcp__code_review_graph__detect_changes_tool"
+          ]
+        }
+      }
+    },
+    {
+      "agent": "session-a",
+      "name": "crg_workflow",
+      "args": {
+        "workflow": "advanced"
+      },
+      "result": {
+        "isError": false,
+        "value": {
+          "tools": [
+            "mcp__code_review_graph__build_or_update_graph_tool",
+            "mcp__code_review_graph__run_postprocess_tool",
+            "mcp__code_review_graph__get_minimal_context_tool",
+            "mcp__code_review_graph__query_graph_tool",
+            "mcp__code_review_graph__semantic_search_nodes_tool",
+            "mcp__code_review_graph__embed_graph_tool",
+            "mcp__code_review_graph__list_graph_stats_tool",
+            "mcp__code_review_graph__get_docs_section_tool",
+            "mcp__code_review_graph__find_large_functions_tool",
+            "mcp__code_review_graph__list_flows_tool",
+            "mcp__code_review_graph__get_flow_tool",
+            "mcp__code_review_graph__list_communities_tool",
+            "mcp__code_review_graph__get_community_tool",
+            "mcp__code_review_graph__get_architecture_overview_tool",
+            "mcp__code_review_graph__detect_changes_tool",
+            "mcp__code_review_graph__get_hub_nodes_tool",
+            "mcp__code_review_graph__get_bridge_nodes_tool",
+            "mcp__code_review_graph__get_knowledge_gaps_tool",
+            "mcp__code_review_graph__get_surprising_connections_tool",
+            "mcp__code_review_graph__get_suggested_questions_tool",
+            "mcp__code_review_graph__traverse_graph_tool",
+            "mcp__code_review_graph__list_repos_tool",
+            "mcp__code_review_graph__cross_repo_search_tool"
+          ]
+        }
+      }
+    },
+    {
+      "agent": "session-a",
+      "name": "crg_workflow",
+      "args": {
+        "workflow": "refactor"
+      },
+      "result": {
+        "isError": false,
+        "value": {
+          "tools": [
+            "mcp__code_review_graph__build_or_update_graph_tool",
+            "mcp__code_review_graph__get_minimal_context_tool",
+            "mcp__code_review_graph__get_impact_radius_tool",
+            "mcp__code_review_graph__query_graph_tool",
+            "mcp__code_review_graph__semantic_search_nodes_tool",
+            "mcp__code_review_graph__list_graph_stats_tool",
+            "mcp__code_review_graph__get_docs_section_tool",
+            "mcp__code_review_graph__find_large_functions_tool",
+            "mcp__code_review_graph__get_affected_flows_tool",
+            "mcp__code_review_graph__detect_changes_tool",
+            "mcp__code_review_graph__refactor_tool",
+            "mcp__code_review_graph__apply_refactor_tool"
+          ]
+        }
+      }
+    },
+    {
+      "agent": "session-a",
+      "name": "crg_workflow",
+      "args": {
+        "workflow": "review"
+      },
+      "result": {
+        "isError": false,
+        "value": {
+          "tools": [
+            "mcp__code_review_graph__build_or_update_graph_tool",
+            "mcp__code_review_graph__get_minimal_context_tool",
+            "mcp__code_review_graph__get_impact_radius_tool",
+            "mcp__code_review_graph__query_graph_tool",
+            "mcp__code_review_graph__get_review_context_tool",
+            "mcp__code_review_graph__semantic_search_nodes_tool",
+            "mcp__code_review_graph__list_graph_stats_tool",
+            "mcp__code_review_graph__get_docs_section_tool",
+            "mcp__code_review_graph__list_flows_tool",
+            "mcp__code_review_graph__get_flow_tool",
+            "mcp__code_review_graph__get_affected_flows_tool",
+            "mcp__code_review_graph__list_communities_tool",
+            "mcp__code_review_graph__detect_changes_tool"
+          ]
+        }
+      }
+    },
+    {
+      "agent": "session-a",
+      "name": "crg_workflow",
+      "args": {
+        "workflow": "review"
+      },
+      "result": {
+        "isError": false,
+        "value": {
+          "tools": [
+            "mcp__code_review_graph__build_or_update_graph_tool",
+            "mcp__code_review_graph__get_minimal_context_tool",
+            "mcp__code_review_graph__get_impact_radius_tool",
+            "mcp__code_review_graph__query_graph_tool",
+            "mcp__code_review_graph__get_review_context_tool",
+            "mcp__code_review_graph__semantic_search_nodes_tool",
+            "mcp__code_review_graph__list_graph_stats_tool",
+            "mcp__code_review_graph__get_docs_section_tool",
+            "mcp__code_review_graph__list_flows_tool",
+            "mcp__code_review_graph__get_flow_tool",
+            "mcp__code_review_graph__get_affected_flows_tool",
+            "mcp__code_review_graph__list_communities_tool",
+            "mcp__code_review_graph__detect_changes_tool"
+          ]
+        }
+      }
+    },
+    {
+      "agent": "session-a",
+      "name": "crg_workflow",
+      "args": {
+        "workflow": "review"
+      },
+      "result": {
+        "isError": false,
+        "value": {
+          "tools": [
+            "mcp__code_review_graph__build_or_update_graph_tool",
+            "mcp__code_review_graph__get_minimal_context_tool",
+            "mcp__code_review_graph__get_impact_radius_tool",
+            "mcp__code_review_graph__query_graph_tool",
+            "mcp__code_review_graph__get_review_context_tool",
+            "mcp__code_review_graph__semantic_search_nodes_tool",
+            "mcp__code_review_graph__list_graph_stats_tool",
+            "mcp__code_review_graph__get_docs_section_tool",
+            "mcp__code_review_graph__list_flows_tool",
+            "mcp__code_review_graph__get_flow_tool",
+            "mcp__code_review_graph__get_affected_flows_tool",
+            "mcp__code_review_graph__list_communities_tool",
+            "mcp__code_review_graph__detect_changes_tool"
+          ]
+        }
+      }
+    },
+    {
+      "agent": "session-b",
+      "name": "crg_workflow",
+      "args": {
+        "workflow": "all"
+      },
+      "result": {
+        "isError": false,
+        "value": {
+          "tools": [
+            "mcp__code_review_graph__build_or_update_graph_tool",
+            "mcp__code_review_graph__run_postprocess_tool",
+            "mcp__code_review_graph__get_minimal_context_tool",
+            "mcp__code_review_graph__get_impact_radius_tool",
+            "mcp__code_review_graph__query_graph_tool",
+            "mcp__code_review_graph__get_review_context_tool",
+            "mcp__code_review_graph__semantic_search_nodes_tool",
+            "mcp__code_review_graph__embed_graph_tool",
+            "mcp__code_review_graph__list_graph_stats_tool",
+            "mcp__code_review_graph__get_docs_section_tool",
+            "mcp__code_review_graph__find_large_functions_tool",
+            "mcp__code_review_graph__list_flows_tool",
+            "mcp__code_review_graph__get_flow_tool",
+            "mcp__code_review_graph__get_affected_flows_tool",
+            "mcp__code_review_graph__list_communities_tool",
+            "mcp__code_review_graph__get_community_tool",
+            "mcp__code_review_graph__get_architecture_overview_tool",
+            "mcp__code_review_graph__detect_changes_tool",
+            "mcp__code_review_graph__refactor_tool",
+            "mcp__code_review_graph__apply_refactor_tool",
+            "mcp__code_review_graph__generate_wiki_tool",
+            "mcp__code_review_graph__get_wiki_page_tool",
+            "mcp__code_review_graph__get_hub_nodes_tool",
+            "mcp__code_review_graph__get_bridge_nodes_tool",
+            "mcp__code_review_graph__get_knowledge_gaps_tool",
+            "mcp__code_review_graph__get_surprising_connections_tool",
+            "mcp__code_review_graph__get_suggested_questions_tool",
+            "mcp__code_review_graph__traverse_graph_tool",
+            "mcp__code_review_graph__list_repos_tool",
+            "mcp__code_review_graph__cross_repo_search_tool"
+          ]
+        }
+      }
+    },
+    {
+      "agent": "session-b",
+      "name": "mcp__code_review_graph__get_minimal_context_tool",
+      "args": {
+        "task": "understand total"
+      },
+      "result": {
+        "isError": false,
+        "value": {
+          "status": "ok",
+          "summary": "3 nodes, 3 edges across 1 files.",
+          "communities": [
+            "repo-total"
+          ],
+          "flows_affected": [
+            "main"
+          ],
+          "next_tool_suggestions": [
+            "get_architecture_overview",
+            "list_communities",
+            "list_flows"
+          ],
+          "_graph": {
+            "updated_at": "2026-10-08T09:47:47",
+            "age_seconds": 1,
+            "built_at_sha": "6520a6afbc9311986f75e0cbc54a78c2fa7df8f1",
+            "built_on_branch": "master",
+            "head_sha": "6520a6afbc9311986f75e0cbc54a78c2fa7df8f1",
+            "head_matches_build": true
+          }
+        }
+      }
+    },
+    {
+      "agent": "session-c",
+      "name": "crg_workflow",
+      "args": {
+        "workflow": "context"
+      },
+      "result": {
+        "isError": false,
+        "value": {
+          "tools": [
+            "mcp__code_review_graph__build_or_update_graph_tool",
+            "mcp__code_review_graph__get_minimal_context_tool",
+            "mcp__code_review_graph__query_graph_tool",
+            "mcp__code_review_graph__semantic_search_nodes_tool",
+            "mcp__code_review_graph__list_graph_stats_tool",
+            "mcp__code_review_graph__get_docs_section_tool"
+          ]
+        }
+      }
+    },
+    {
+      "agent": "session-c",
+      "name": "mcp__code_review_graph__list_graph_stats_tool",
+      "args": {},
+      "result": {
+        "isError": false,
+        "value": {
+          "status": "ok",
+          "summary": "Graph statistics for authorized:\n  Files: 1\n  Total nodes: 2\n  Total edges: 1\n  Languages: python\n  Last updated: 2026-10-08T09:47:51\n\nNodes by kind:\n  File: 1\n  Function: 1\n\nEdges by kind:\n  CONTAINS: 1\n\nCALLS by target resolution: 0 direct, 0 unresolved\n\nEmbeddings: 0 nodes embedded\n  (install sentence-transformers for semantic search)",
+          "total_nodes": 2,
+          "total_edges": 1,
+          "nodes_by_kind": {
+            "File": 1,
+            "Function": 1
+          },
+          "edges_by_kind": {
+            "CONTAINS": 1
+          },
+          "calls_by_resolution": {
+            "direct": 0,
+            "unresolved": 0
+          },
+          "languages": [
+            "python"
+          ],
+          "files_count": 1,
+          "last_updated": "2026-10-08T09:47:51",
+          "embeddings_count": 0,
+          "_graph": {
+            "updated_at": "2026-10-08T09:47:51",
+            "age_seconds": 0
+          }
+        }
+      }
+    },
+    {
+      "agent": "session-b",
+      "name": "mcp__code_review_graph__list_repos_tool",
+      "args": {},
+      "result": {
+        "isError": false,
+        "value": {
+          "status": "ok",
+          "repos": [
+            {
+              "alias": "repo",
+              "path": "<TEST_TMP>\\repo"
+            },
+            {
+              "alias": "authorized",
+              "path": "<TEST_TMP>\\authorized"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "agent": "session-b",
+      "name": "mcp__code_review_graph__cross_repo_search_tool",
+      "args": {
+        "query": "external",
+        "repos": [
+          "authorized"
+        ]
+      },
+      "result": {
+        "isError": false,
+        "value": {
+          "status": "ok",
+          "results": [
+            {
+              "name": "external",
+              "qualified_name": "<TEST_TMP>/authorized/other.py::external",
+              "kind": "Function",
+              "file_path": "<TEST_TMP>/authorized/other.py",
+              "line_start": 1,
+              "line_end": 2,
+              "language": "python",
+              "params": "()",
+              "return_type": null,
+              "signature": "def external(())",
+              "score": 0.262295,
+              "repo": "authorized"
+            }
+          ],
+          "total": 1,
+          "results_omitted": 0,
+          "truncated": false
+        }
+      }
+    },
+    {
+      "agent": "session-b",
+      "name": "mcp__code_review_graph__cross_repo_search_tool",
+      "args": {
+        "query": "private",
+        "repos": [
+          "unauthorized"
+        ]
+      },
+      "result": {
+        "isError": true,
+        "error": {
+          "message": "Repository is not authorized"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Error: Repository is not authorized"
+          }
+        ]
+      }
+    },
+    {
+      "agent": "session-b",
+      "name": "mcp__code_review_graph__semantic_search_nodes_tool",
+      "args": {
+        "query": "total",
+        "provider": "openai"
+      },
+      "result": {
+        "isError": true,
+        "error": {
+          "message": "Embedding provider has not been authorized in plugin configuration"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Error: Embedding provider has not been authorized in plugin configuration"
+          }
+        ]
+      }
+    },
+    {
+      "agent": "session-a",
+      "name": "mcp__code_review_graph__get_minimal_context_tool",
+      "args": {
+        "task": "bad",
+        "repo_root": "<TEST_TMP>"
+      },
+      "result": {
+        "isError": true,
+        "error": {
+          "message": "data must NOT have additional properties"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Error: data must NOT have additional properties"
+          }
+        ]
+      }
+    },
+    {
+      "agent": "session-a",
+      "name": "mcp__code_review_graph__get_minimal_context_tool",
+      "args": {
+        "task": "bad",
+        "changed_files": [
+          "../escape.py"
+        ]
+      },
+      "result": {
+        "isError": true,
+        "error": {
+          "message": "Path is outside the authorized repository"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Error: Path is outside the authorized repository"
+          }
+        ]
+      }
+    },
+    {
+      "agent": "session-a",
+      "name": "mcp__code_review_graph__get_docs_section_tool",
+      "args": {
+        "section_name": "private"
+      },
+      "result": {
+        "isError": true,
+        "error": {
+          "message": "Symlink escapes the authorized repository"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Error: Symlink escapes the authorized repository"
+          }
+        ]
+      }
+    },
+    {
+      "agent": "session-a",
+      "name": "crg_prompt",
+      "args": {
+        "name": "review_changes"
+      },
+      "result": {
+        "isError": false,
+        "value": {
+          "description": "Pre-commit review workflow using detect_changes, affected_flows, and test gaps.\n\nProduces a structured code review with risk levels and actionable findings.",
+          "messages": [
+            {
+              "role": "user",
+              "content": {
+                "type": "text",
+                "text": "## Rules for Token-Efficient Graph Usage\n1. ALWAYS call `mcp__code_review_graph__get_minimal_context_tool` first with a task description.\n2. Use `detail_level=\"minimal\"` on all tool calls unless the minimal output is insufficient.\n3. Only escalate to `detail_level=\"standard\"` or `\"verbose\"` for the specific entities that need deeper inspection.\n4. Never request more than 3 tool calls per turn unless absolutely necessary.\n5. Prefer targeted queries (mcp__code_review_graph__query_graph_tool with a specific symbol) over broad scans (mcp__code_review_graph__list_communities_tool with full members).\n6. When reviewing changes: mcp__code_review_graph__detect_changes_tool(detail_level=\"minimal\") → only expand on high-risk items.\n\n## Review Workflow\n1. Call `mcp__code_review_graph__get_minimal_context_tool(task=\"review changes against HEAD~1\", base=\"HEAD~1\")` to get risk overview.\n2. If risk is \"low\": call `mcp__code_review_graph__detect_changes_tool(base=\"HEAD~1\", detail_level=\"minimal\")` → report summary + any test gaps.\n3. If risk is \"medium\" or \"high\":\n   a. Call `mcp__code_review_graph__detect_changes_tool(base=\"HEAD~1\", detail_level=\"standard\")` for full change list.\n   b. For each high-risk function, call `mcp__code_review_graph__query_graph_tool(pattern=\"callers_of\", target=<func>, detail_level=\"minimal\")`.\n   c. Call `mcp__code_review_graph__get_affected_flows_tool(base=\"HEAD~1\", detail_level=\"minimal\")` only if >3 changed functions.\n4. Summarize: risk level, what changed, test gaps, specific improvements needed.\n\nDo NOT call mcp__code_review_graph__get_review_context_tool unless you need source code snippets for a specific function."
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "agent": "session-a",
+      "name": "crg_prompt",
+      "args": {
+        "name": "architecture_map"
+      },
+      "result": {
+        "isError": false,
+        "value": {
+          "description": "Architecture documentation using communities, flows, and Mermaid diagrams.\n\nGenerates a comprehensive architecture map with module summaries and coupling warnings.",
+          "messages": [
+            {
+              "role": "user",
+              "content": {
+                "type": "text",
+                "text": "## Rules for Token-Efficient Graph Usage\n1. ALWAYS call `mcp__code_review_graph__get_minimal_context_tool` first with a task description.\n2. Use `detail_level=\"minimal\"` on all tool calls unless the minimal output is insufficient.\n3. Only escalate to `detail_level=\"standard\"` or `\"verbose\"` for the specific entities that need deeper inspection.\n4. Never request more than 3 tool calls per turn unless absolutely necessary.\n5. Prefer targeted queries (mcp__code_review_graph__query_graph_tool with a specific symbol) over broad scans (mcp__code_review_graph__list_communities_tool with full members).\n6. When reviewing changes: mcp__code_review_graph__detect_changes_tool(detail_level=\"minimal\") → only expand on high-risk items.\n\n## Architecture Mapping Workflow\n1. Call `mcp__code_review_graph__get_minimal_context_tool(task=\"map architecture\")`.\n2. Call `mcp__code_review_graph__get_architecture_overview_tool(detail_level=\"minimal\")` for community coupling summary.\n3. Call `mcp__code_review_graph__list_flows_tool(detail_level=\"minimal\")` for critical flow names + criticality scores.\n4. Only call `mcp__code_review_graph__get_community_tool(name=<X>, detail_level=\"standard\")` for the 1-2 communities the user is most interested in.\n5. Produce a concise Mermaid diagram showing communities as boxes and key flows as arrows."
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "agent": "session-a",
+      "name": "crg_prompt",
+      "args": {
+        "name": "debug_issue"
+      },
+      "result": {
+        "isError": false,
+        "value": {
+          "description": "Guided debugging using search, flow tracing, and recent changes.\n\nSystematic debugging workflow that traces execution paths and identifies root causes.",
+          "messages": [
+            {
+              "role": "user",
+              "content": {
+                "type": "text",
+                "text": "## Rules for Token-Efficient Graph Usage\n1. ALWAYS call `mcp__code_review_graph__get_minimal_context_tool` first with a task description.\n2. Use `detail_level=\"minimal\"` on all tool calls unless the minimal output is insufficient.\n3. Only escalate to `detail_level=\"standard\"` or `\"verbose\"` for the specific entities that need deeper inspection.\n4. Never request more than 3 tool calls per turn unless absolutely necessary.\n5. Prefer targeted queries (mcp__code_review_graph__query_graph_tool with a specific symbol) over broad scans (mcp__code_review_graph__list_communities_tool with full members).\n6. When reviewing changes: mcp__code_review_graph__detect_changes_tool(detail_level=\"minimal\") → only expand on high-risk items.\n\n## Debug Workflow\n1. Call `mcp__code_review_graph__get_minimal_context_tool(task=\"debug: <description>\")`.\n2. Call `mcp__code_review_graph__semantic_search_nodes_tool(query=<keywords from description>, detail_level=\"minimal\", limit=5)`.\n3. For the top 1-2 results, call `mcp__code_review_graph__query_graph_tool(pattern=\"callers_of\", target=<name>, detail_level=\"minimal\")`.\n4. If the issue involves execution flow: call `mcp__code_review_graph__get_flow_tool(name=<relevant flow>)` for the single most relevant flow.\n5. Only call `mcp__code_review_graph__get_review_context_tool` or `mcp__code_review_graph__get_impact_radius_tool` if you need to trace the blast radius of a specific change."
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "agent": "session-a",
+      "name": "crg_prompt",
+      "args": {
+        "name": "onboard_developer"
+      },
+      "result": {
+        "isError": false,
+        "value": {
+          "description": "New developer orientation using stats, architecture, and critical flows.\n\nCreates an onboarding guide covering codebase structure, key modules, and patterns.",
+          "messages": [
+            {
+              "role": "user",
+              "content": {
+                "type": "text",
+                "text": "## Rules for Token-Efficient Graph Usage\n1. ALWAYS call `mcp__code_review_graph__get_minimal_context_tool` first with a task description.\n2. Use `detail_level=\"minimal\"` on all tool calls unless the minimal output is insufficient.\n3. Only escalate to `detail_level=\"standard\"` or `\"verbose\"` for the specific entities that need deeper inspection.\n4. Never request more than 3 tool calls per turn unless absolutely necessary.\n5. Prefer targeted queries (mcp__code_review_graph__query_graph_tool with a specific symbol) over broad scans (mcp__code_review_graph__list_communities_tool with full members).\n6. When reviewing changes: mcp__code_review_graph__detect_changes_tool(detail_level=\"minimal\") → only expand on high-risk items.\n\n## Onboarding Workflow\n1. Call `mcp__code_review_graph__get_minimal_context_tool(task=\"onboard developer\")`.\n2. Call `mcp__code_review_graph__list_graph_stats_tool()` for technology overview.\n3. Call `mcp__code_review_graph__get_architecture_overview_tool(detail_level=\"minimal\")` for the 30-second mental model.\n4. Call `mcp__code_review_graph__list_communities_tool(detail_level=\"minimal\")` — present as a table of module names + sizes.\n5. Call `mcp__code_review_graph__list_flows_tool(detail_level=\"minimal\")` — highlight the top 3 critical flows.\n6. Only drill into a specific community or flow if the developer asks."
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "agent": "session-a",
+      "name": "crg_prompt",
+      "args": {
+        "name": "pre_merge_check"
+      },
+      "result": {
+        "isError": false,
+        "value": {
+          "description": "PR readiness check with risk scoring, test gaps, and dead code detection.\n\nProduces a merge readiness report with risk assessment and recommendations.",
+          "messages": [
+            {
+              "role": "user",
+              "content": {
+                "type": "text",
+                "text": "## Rules for Token-Efficient Graph Usage\n1. ALWAYS call `mcp__code_review_graph__get_minimal_context_tool` first with a task description.\n2. Use `detail_level=\"minimal\"` on all tool calls unless the minimal output is insufficient.\n3. Only escalate to `detail_level=\"standard\"` or `\"verbose\"` for the specific entities that need deeper inspection.\n4. Never request more than 3 tool calls per turn unless absolutely necessary.\n5. Prefer targeted queries (mcp__code_review_graph__query_graph_tool with a specific symbol) over broad scans (mcp__code_review_graph__list_communities_tool with full members).\n6. When reviewing changes: mcp__code_review_graph__detect_changes_tool(detail_level=\"minimal\") → only expand on high-risk items.\n\n## Pre-Merge Check Workflow\n1. Call `mcp__code_review_graph__get_minimal_context_tool(task=\"pre-merge check\", base=\"HEAD~1\")`.\n2. Call `mcp__code_review_graph__detect_changes_tool(base=\"HEAD~1\", detail_level=\"minimal\")` for risk score and test gaps.\n3. If risk > 0.4: call `mcp__code_review_graph__get_affected_flows_tool(base=\"HEAD~1\", detail_level=\"minimal\")`.\n4. If test_gap_count > 0: call `mcp__code_review_graph__query_graph_tool(pattern=\"tests_for\", target=<each untested function>, detail_level=\"minimal\")` for up to 3 functions.\n5. Call `mcp__code_review_graph__refactor_tool(mode=\"dead_code\", detail_level=\"minimal\")` to check for newly dead code.\n6. Only call `mcp__code_review_graph__find_large_functions_tool` or `mcp__code_review_graph__get_impact_radius_tool` if risk > 0.7.\n7. Output: GO/NO-GO recommendation with 1-sentence justification + list of required follow-ups."
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "agent": "session-a",
+      "name": "mcp__code_review_graph__get_architecture_overview_tool",
+      "args": {},
+      "result": {
+        "isError": false,
+        "value": {
+          "status": "ok",
+          "summary": "Architecture: 1 communities, 0 community pairs, 0 warning(s)",
+          "communities": [
+            {
+              "id": 1,
+              "name": "repo-total",
+              "size": 2,
+              "cohesion": 0.3333,
+              "dominant_language": "python"
+            }
+          ],
+          "cross_community_edges": [],
+          "warnings": [],
+          "cross_community_edges_total": 0,
+          "truncated": false,
+          "_hints": {
+            "next_steps": [
+              {
+                "tool": "list_communities_tool",
+                "suggestion": "Drill into individual communities"
+              },
+              {
+                "tool": "detect_changes_tool",
+                "suggestion": "See how recent changes affect the architecture"
+              },
+              {
+                "tool": "list_flows_tool",
+                "suggestion": "Explore execution flows"
+              }
+            ],
+            "related": [],
+            "warnings": []
+          },
+          "context_savings": {
+            "estimated": true,
+            "saved_tokens": 0,
+            "saved_percent": 0
+          },
+          "_graph": {
+            "updated_at": "2026-10-08T09:47:47",
+            "age_seconds": 4,
+            "built_at_sha": "6520a6afbc9311986f75e0cbc54a78c2fa7df8f1",
+            "built_on_branch": "master",
+            "head_sha": "6520a6afbc9311986f75e0cbc54a78c2fa7df8f1",
+            "head_matches_build": true
+          }
+        }
+      }
+    },
+    {
+      "agent": "session-a",
+      "name": "mcp__code_review_graph__get_review_context_tool",
+      "args": {
+        "changed_files": [
+          "demo.py"
+        ]
+      },
+      "result": {
+        "isError": false,
+        "value": {
+          "status": "ok",
+          "summary": "Review context for 1 changed file(s):\n  - 3 directly changed nodes\n  - 0 impacted nodes in 0 files\n\nReview guidance:\n- 2 changed function(s) have no direct test: main, total",
+          "context": {
+            "changed_files": [
+              "demo.py"
+            ],
+            "changed_files_total": 1,
+            "file_risk": {
+              "demo.py": 0.51
+            },
+            "impacted_files": [],
+            "impacted_files_total": 0,
+            "graph": {
+              "changed_nodes": [
+                {
+                  "id": 1,
+                  "kind": "File",
+                  "name": "<TEST_TMP>/repo/demo.py",
+                  "qualified_name": "<TEST_TMP>/repo/demo.py",
+                  "file_path": "<TEST_TMP>/repo/demo.py",
+                  "line_start": 1,
+                  "line_end": 6,
+                  "language": "python",
+                  "parent_name": null,
+                  "is_test": false
+                },
+                {
+                  "id": 3,
+                  "kind": "Function",
+                  "name": "main",
+                  "qualified_name": "<TEST_TMP>/repo/demo.py::main",
+                  "file_path": "<TEST_TMP>/repo/demo.py",
+                  "line_start": 4,
+                  "line_end": 5,
+                  "language": "python",
+                  "parent_name": null,
+                  "is_test": false
+                },
+                {
+                  "id": 2,
+                  "kind": "Function",
+                  "name": "total",
+                  "qualified_name": "<TEST_TMP>/repo/demo.py::total",
+                  "file_path": "<TEST_TMP>/repo/demo.py",
+                  "line_start": 1,
+                  "line_end": 2,
+                  "language": "python",
+                  "parent_name": null,
+                  "is_test": false
+                }
+              ],
+              "changed_nodes_total": 3,
+              "impacted_nodes": [],
+              "impacted_nodes_total": 0,
+              "edges": [
+                {
+                  "id": 1,
+                  "kind": "CONTAINS",
+                  "source": "<TEST_TMP>/repo/demo.py",
+                  "target": "<TEST_TMP>/repo/demo.py::total",
+                  "file_path": "<TEST_TMP>/repo/demo.py",
+                  "line": 1,
+                  "confidence": 1,
+                  "confidence_tier": "EXTRACTED"
+                },
+                {
+                  "id": 2,
+                  "kind": "CONTAINS",
+                  "source": "<TEST_TMP>/repo/demo.py",
+                  "target": "<TEST_TMP>/repo/demo.py::main",
+                  "file_path": "<TEST_TMP>/repo/demo.py",
+                  "line": 4,
+                  "confidence": 1,
+                  "confidence_tier": "EXTRACTED"
+                },
+                {
+                  "id": 3,
+                  "kind": "CALLS",
+                  "source": "<TEST_TMP>/repo/demo.py::main",
+                  "target": "<TEST_TMP>/repo/demo.py::total",
+                  "file_path": "<TEST_TMP>/repo/demo.py",
+                  "line": 5,
+                  "confidence": 1,
+                  "confidence_tier": "EXTRACTED"
+                }
+              ],
+              "edges_total": 3
+            },
+            "truncated": false,
+            "source_snippets": {
+              "demo.py": "1: ﻿def total(a, b):\n2:     return a + b\n3: \n4: def main():\n5:     return total(2, 3)"
+            },
+            "source_regions": {
+              "shown": 1,
+              "total": 1,
+              "incomplete": {}
+            },
+            "review_guidance": "- 2 changed function(s) have no direct test: main, total"
+          },
+          "context_savings": {
+            "estimated": true,
+            "saved_tokens": 0,
+            "saved_percent": 0
+          },
+          "_graph": {
+            "updated_at": "2026-10-08T09:47:47",
+            "age_seconds": 4,
+            "built_at_sha": "6520a6afbc9311986f75e0cbc54a78c2fa7df8f1",
+            "built_on_branch": "master",
+            "head_sha": "6520a6afbc9311986f75e0cbc54a78c2fa7df8f1",
+            "head_matches_build": true
+          }
+        }
+      }
+    },
+    {
+      "agent": "session-a",
+      "name": "mcp__code_review_graph__get_impact_radius_tool",
+      "args": {
+        "changed_files": [
+          "demo.py"
+        ]
+      },
+      "result": {
+        "isError": false,
+        "value": {
+          "status": "ok",
+          "summary": "Blast radius for 1 changed file(s):\n  - 3 nodes directly changed\n  - 0 nodes impacted (within 2 hops)\n  - 0 additional files affected",
+          "changed_files": [
+            "demo.py"
+          ],
+          "changed_nodes": [
+            {
+              "id": 1,
+              "kind": "File",
+              "name": "<TEST_TMP>/repo/demo.py",
+              "qualified_name": "<TEST_TMP>/repo/demo.py",
+              "file_path": "<TEST_TMP>/repo/demo.py",
+              "line_start": 1,
+              "line_end": 6,
+              "language": "python",
+              "parent_name": null,
+              "is_test": false
+            },
+            {
+              "id": 3,
+              "kind": "Function",
+              "name": "main",
+              "qualified_name": "<TEST_TMP>/repo/demo.py::main",
+              "file_path": "<TEST_TMP>/repo/demo.py",
+              "line_start": 4,
+              "line_end": 5,
+              "language": "python",
+              "parent_name": null,
+              "is_test": false
+            },
+            {
+              "id": 2,
+              "kind": "Function",
+              "name": "total",
+              "qualified_name": "<TEST_TMP>/repo/demo.py::total",
+              "file_path": "<TEST_TMP>/repo/demo.py",
+              "line_start": 1,
+              "line_end": 2,
+              "language": "python",
+              "parent_name": null,
+              "is_test": false
+            }
+          ],
+          "changed_nodes_omitted": 0,
+          "impacted_nodes": [],
+          "impacted_files": [],
+          "impacted_files_omitted": 0,
+          "edges": [
+            {
+              "id": 1,
+              "kind": "CONTAINS",
+              "source": "<TEST_TMP>/repo/demo.py",
+              "target": "<TEST_TMP>/repo/demo.py::total",
+              "file_path": "<TEST_TMP>/repo/demo.py",
+              "line": 1,
+              "confidence": 1,
+              "confidence_tier": "EXTRACTED"
+            },
+            {
+              "id": 2,
+              "kind": "CONTAINS",
+              "source": "<TEST_TMP>/repo/demo.py",
+              "target": "<TEST_TMP>/repo/demo.py::main",
+              "file_path": "<TEST_TMP>/repo/demo.py",
+              "line": 4,
+              "confidence": 1,
+              "confidence_tier": "EXTRACTED"
+            },
+            {
+              "id": 3,
+              "kind": "CALLS",
+              "source": "<TEST_TMP>/repo/demo.py::main",
+              "target": "<TEST_TMP>/repo/demo.py::total",
+              "file_path": "<TEST_TMP>/repo/demo.py",
+              "line": 5,
+              "confidence": 1,
+              "confidence_tier": "EXTRACTED"
+            }
+          ],
+          "edges_omitted": 0,
+          "truncated": false,
+          "total_impacted": 0,
+          "nodes_omitted": 0,
+          "resolution": "all",
+          "unresolved_call_sites": 0,
+          "confidence": "python getattr dispatch and decorator-based registration are not statically traced, so callers can be missing here",
+          "context_savings": {
+            "estimated": true,
+            "saved_tokens": 0,
+            "saved_percent": 0
+          },
+          "_graph": {
+            "updated_at": "2026-10-08T09:47:47",
+            "age_seconds": 4,
+            "built_at_sha": "6520a6afbc9311986f75e0cbc54a78c2fa7df8f1",
+            "built_on_branch": "master",
+            "head_sha": "6520a6afbc9311986f75e0cbc54a78c2fa7df8f1",
+            "head_matches_build": true
+          }
+        }
+      }
+    },
+    {
+      "agent": "session-a",
+      "name": "mcp__code_review_graph__get_affected_flows_tool",
+      "args": {
+        "changed_files": [
+          "demo.py"
+        ]
+      },
+      "result": {
+        "isError": false,
+        "value": {
+          "status": "ok",
+          "summary": "1 flow(s) affected by changes in 1 file(s)",
+          "changed_files": [
+            "demo.py"
+          ],
+          "affected_flows": [
+            {
+              "id": 1,
+              "name": "main",
+              "entry_point_id": 3,
+              "depth": 1,
+              "node_count": 2,
+              "file_count": 1,
+              "criticality": 0.16,
+              "path": [
+                3,
+                2
+              ],
+              "steps": [
+                {
+                  "node_id": 3,
+                  "name": "main",
+                  "kind": "Function",
+                  "file": "<TEST_TMP>/repo/demo.py",
+                  "line_start": 4,
+                  "line_end": 5,
+                  "qualified_name": "<TEST_TMP>/repo/demo.py::main"
+                },
+                {
+                  "node_id": 2,
+                  "name": "total",
+                  "kind": "Function",
+                  "file": "<TEST_TMP>/repo/demo.py",
+                  "line_start": 1,
+                  "line_end": 2,
+                  "qualified_name": "<TEST_TMP>/repo/demo.py::total"
+                }
+              ],
+              "created_at": "2026-10-08 01:47:47",
+              "updated_at": "2026-10-08 01:47:47",
+              "total_steps": 2
+            }
+          ],
+          "total": 1,
+          "truncated": false,
+          "_hints": {
+            "next_steps": [
+              {
+                "tool": "detect_changes_tool",
+                "suggestion": "Get risk-scored change analysis"
+              },
+              {
+                "tool": "get_flow_tool",
+                "suggestion": "Inspect a specific affected flow"
+              },
+              {
+                "tool": "get_review_context_tool",
+                "suggestion": "Build a full review context for the changes"
+              }
+            ],
+            "related": [],
+            "warnings": []
+          },
+          "_graph": {
+            "updated_at": "2026-10-08T09:47:47",
+            "age_seconds": 5,
+            "built_at_sha": "6520a6afbc9311986f75e0cbc54a78c2fa7df8f1",
+            "built_on_branch": "master",
+            "head_sha": "6520a6afbc9311986f75e0cbc54a78c2fa7df8f1",
+            "head_matches_build": true
+          }
+        }
+      }
+    },
+    {
+      "agent": "session-a",
+      "name": "crg_visualize",
+      "args": {
+        "mode": "full"
+      },
+      "result": {
+        "isError": false,
+        "value": {
+          "status": "ok",
+          "path": "<TEST_TMP>\\repo\\.code-review-graph\\graph.html",
+          "sidebar": "code-review-graph",
+          "log": "Visualization (full): <TEST_TMP>\\repo\\.code-review-graph\\graph.html\r\nOpen in browser to explore.\r\n"
+        }
+      }
+    },
+    {
+      "agent": "session-a",
+      "name": "crg_visualize",
+      "args": {
+        "format": "json"
+      },
+      "result": {
+        "isError": false,
+        "value": {
+          "status": "ok",
+          "path": "<TEST_TMP>\\repo\\.code-review-graph\\graph.json",
+          "log": "INFO: JSON exported to <TEST_TMP>\\repo\\.code-review-graph\\graph.json\r\nJSON exported: <TEST_TMP>\\repo\\.code-review-graph\\graph.json\r\n"
+        }
+      }
+    },
+    {
+      "agent": "session-a",
+      "name": "crg_visualize",
+      "args": {
+        "format": "graphml"
+      },
+      "result": {
+        "isError": false,
+        "value": {
+          "status": "ok",
+          "path": "<TEST_TMP>\\repo\\.code-review-graph\\graph.graphml",
+          "log": "INFO: GraphML exported to <TEST_TMP>\\repo\\.code-review-graph\\graph.graphml (3 nodes, 3 edges)\r\nGraphML exported: <TEST_TMP>\\repo\\.code-review-graph\\graph.graphml\r\n"
+        }
+      }
+    },
+    {
+      "agent": "session-a",
+      "name": "crg_visualize",
+      "args": {
+        "format": "cypher"
+      },
+      "result": {
+        "isError": false,
+        "value": {
+          "status": "ok",
+          "path": "<TEST_TMP>\\repo\\.code-review-graph\\graph.cypher",
+          "log": "INFO: Neo4j Cypher exported to <TEST_TMP>\\repo\\.code-review-graph\\graph.cypher (3 nodes, 3 edges)\r\nNeo4j Cypher exported: <TEST_TMP>\\repo\\.code-review-graph\\graph.cypher\r\n"
+        }
+      }
+    },
+    {
+      "agent": "session-a",
+      "name": "crg_visualize",
+      "args": {
+        "format": "obsidian"
+      },
+      "result": {
+        "isError": false,
+        "value": {
+          "status": "ok",
+          "path": "<TEST_TMP>\\repo\\.code-review-graph\\obsidian",
+          "log": "INFO: Obsidian vault exported to <TEST_TMP>\\repo\\.code-review-graph\\obsidian (3 pages)\r\nObsidian vault exported: <TEST_TMP>\\repo\\.code-review-graph\\obsidian\r\n"
+        }
+      }
+    },
+    {
+      "agent": "session-a",
+      "name": "crg_visualize",
+      "args": {
+        "format": "svg"
+      },
+      "result": {
+        "isError": false,
+        "value": {
+          "status": "ok",
+          "path": "<TEST_TMP>\\repo\\.code-review-graph\\graph.svg",
+          "log": "INFO: SVG exported to <TEST_TMP>\\repo\\.code-review-graph\\graph.svg (3 nodes)\r\nSVG exported: <TEST_TMP>\\repo\\.code-review-graph\\graph.svg\r\n"
+        }
+      }
+    },
+    {
+      "agent": "session-a",
+      "name": "crg_visualize",
+      "args": {
+        "mode": "full",
+        "path_from": "main",
+        "path_to": "total"
+      },
+      "result": {
+        "isError": false,
+        "value": {
+          "status": "ok",
+          "path": "<TEST_TMP>\\repo\\.code-review-graph\\graph.html",
+          "sidebar": "code-review-graph",
+          "log": "Visualization (path main -> total, depth 2): <TEST_TMP>\\repo\\.code-review-graph\\graph.html\r\nOpen in browser to explore.\r\n"
+        }
+      }
+    },
+    {
+      "agent": "session-b",
+      "name": "mcp__code_review_graph__semantic_search_nodes_tool",
+      "args": {
+        "query": "added"
+      },
+      "result": {
+        "isError": false,
+        "value": {
+          "status": "ok",
+          "query": "added",
+          "search_mode": "none",
+          "summary": "Found 0 node(s) matching 'added'",
+          "results": [],
+          "confidence": "no indexed node matches 'added'; search covers names, paths and signatures, not source text",
+          "_hints": {
+            "next_steps": [
+              {
+                "tool": "query_graph_tool",
+                "suggestion": "Inspect callers/callees of a search result"
+              },
+              {
+                "tool": "get_flow_tool",
+                "suggestion": "See the execution flow through a matched node"
+              },
+              {
+                "tool": "get_impact_radius_tool",
+                "suggestion": "Check the blast radius from matched nodes"
+              }
+            ],
+            "related": [],
+            "warnings": []
+          },
+          "_graph": {
+            "updated_at": "2026-10-08T09:47:47",
+            "age_seconds": 11,
+            "built_at_sha": "6520a6afbc9311986f75e0cbc54a78c2fa7df8f1",
+            "built_on_branch": "master",
+            "head_sha": "6520a6afbc9311986f75e0cbc54a78c2fa7df8f1",
+            "head_matches_build": true
+          }
+        }
+      }
+    },
+    {
+      "agent": "session-b",
+      "name": "mcp__code_review_graph__semantic_search_nodes_tool",
+      "args": {
+        "query": "added"
+      },
+      "result": {
+        "isError": false,
+        "value": {
+          "status": "ok",
+          "query": "added",
+          "search_mode": "none",
+          "summary": "Found 0 node(s) matching 'added'",
+          "results": [],
+          "confidence": "no indexed node matches 'added'; search covers names, paths and signatures, not source text",
+          "_hints": {
+            "next_steps": [
+              {
+                "tool": "query_graph_tool",
+                "suggestion": "Inspect callers/callees of a search result"
+              },
+              {
+                "tool": "get_flow_tool",
+                "suggestion": "See the execution flow through a matched node"
+              },
+              {
+                "tool": "get_impact_radius_tool",
+                "suggestion": "Check the blast radius from matched nodes"
+              }
+            ],
+            "related": [],
+            "warnings": []
+          },
+          "_graph": {
+            "updated_at": "2026-10-08T09:47:47",
+            "age_seconds": 12,
+            "built_at_sha": "6520a6afbc9311986f75e0cbc54a78c2fa7df8f1",
+            "built_on_branch": "master",
+            "head_sha": "6520a6afbc9311986f75e0cbc54a78c2fa7df8f1",
+            "head_matches_build": true
+          }
+        }
+      }
+    },
+    {
+      "agent": "session-b",
+      "name": "mcp__code_review_graph__semantic_search_nodes_tool",
+      "args": {
+        "query": "added"
+      },
+      "result": {
+        "isError": false,
+        "value": {
+          "status": "ok",
+          "query": "added",
+          "search_mode": "keyword",
+          "summary": "Found 1 node(s) matching 'added'",
+          "results": [
+            {
+              "name": "added",
+              "qualified_name": "<TEST_TMP>/repo/demo.py::added",
+              "kind": "Function",
+              "file_path": "<TEST_TMP>/repo/demo.py",
+              "line_start": 4,
+              "line_end": 5,
+              "language": "python",
+              "params": "()",
+              "return_type": null,
+              "signature": null,
+              "score": 48
+            }
+          ],
+          "_hints": {
+            "next_steps": [
+              {
+                "tool": "query_graph_tool",
+                "suggestion": "Inspect callers/callees of a search result"
+              },
+              {
+                "tool": "get_flow_tool",
+                "suggestion": "See the execution flow through a matched node"
+              },
+              {
+                "tool": "get_impact_radius_tool",
+                "suggestion": "Check the blast radius from matched nodes"
+              }
+            ],
+            "related": [],
+            "warnings": []
+          },
+          "_graph": {
+            "updated_at": "2026-10-08T09:47:59",
+            "age_seconds": 0,
+            "built_at_sha": "6520a6afbc9311986f75e0cbc54a78c2fa7df8f1",
+            "built_on_branch": "master",
+            "head_sha": "6520a6afbc9311986f75e0cbc54a78c2fa7df8f1",
+            "head_matches_build": true
+          }
+        }
+      }
+    },
+    {
+      "agent": "session-b",
+      "name": "mcp__code_review_graph__list_graph_stats_tool",
+      "args": {},
+      "result": {
+        "isError": false,
+        "value": {
+          "status": "ok",
+          "summary": "Graph statistics for repo:\n  Files: 1\n  Total nodes: 3\n  Total edges: 3\n  Languages: python\n  Last updated: 2026-10-08T09:47:59\n\nNodes by kind:\n  File: 1\n  Function: 2\n\nEdges by kind:\n  CALLS: 1\n  CONTAINS: 2\n\nCALLS by target resolution: 1 direct, 0 unresolved\n\nEmbeddings: 0 nodes embedded\n  (install sentence-transformers for semantic search)",
+          "total_nodes": 3,
+          "total_edges": 3,
+          "nodes_by_kind": {
+            "File": 1,
+            "Function": 2
+          },
+          "edges_by_kind": {
+            "CALLS": 1,
+            "CONTAINS": 2
+          },
+          "calls_by_resolution": {
+            "direct": 1,
+            "unresolved": 0
+          },
+          "languages": [
+            "python"
+          ],
+          "files_count": 1,
+          "last_updated": "2026-10-08T09:47:59",
+          "embeddings_count": 0,
+          "_graph": {
+            "updated_at": "2026-10-08T09:47:59",
+            "age_seconds": 0,
+            "built_at_sha": "6520a6afbc9311986f75e0cbc54a78c2fa7df8f1",
+            "built_on_branch": "master",
+            "head_sha": "6520a6afbc9311986f75e0cbc54a78c2fa7df8f1",
+            "head_matches_build": true
+          }
+        }
+      }
+    },
+    {
+      "agent": "session-b",
+      "name": "mcp__code_review_graph__refactor_tool",
+      "args": {
+        "mode": "rename",
+        "old_name": "total",
+        "new_name": "sum_values"
+      },
+      "result": {
+        "isError": false,
+        "value": {
+          "status": "ok",
+          "summary": "Rename preview: total -> sum_values, 2 edit(s). Use apply_refactor_tool(refactor_id='e40c7afb') to apply.",
+          "refactor_id": "e40c7afb",
+          "type": "rename",
+          "old_name": "total",
+          "new_name": "sum_values",
+          "edits": [
+            {
+              "file": "<TEST_TMP>/repo/demo.py",
+              "line": 1,
+              "old": "total",
+              "new": "sum_values",
+              "confidence": "high"
+            },
+            {
+              "file": "<TEST_TMP>/repo/demo.py",
+              "line": 5,
+              "old": "total",
+              "new": "sum_values",
+              "confidence": "high"
+            }
+          ],
+          "stats": {
+            "high": 2,
+            "medium": 0,
+            "low": 0
+          },
+          "created_at": 1791424079.8670566,
+          "total": 2,
+          "truncated": false,
+          "_hints": {
+            "next_steps": [
+              {
+                "tool": "query_graph_tool",
+                "suggestion": "Verify call sites before applying a rename"
+              },
+              {
+                "tool": "detect_changes_tool",
+                "suggestion": "Check risk of the refactored code"
+              }
+            ],
+            "related": [],
+            "warnings": []
+          },
+          "_graph": {
+            "updated_at": "2026-10-08T09:47:59",
+            "age_seconds": 0,
+            "built_at_sha": "6520a6afbc9311986f75e0cbc54a78c2fa7df8f1",
+            "built_on_branch": "master",
+            "head_sha": "6520a6afbc9311986f75e0cbc54a78c2fa7df8f1",
+            "head_matches_build": true
+          }
+        }
+      }
+    },
+    {
+      "agent": "session-b",
+      "name": "mcp__code_review_graph__apply_refactor_tool",
+      "args": {
+        "refactor_id": "e40c7afb",
+        "dry_run": true
+      },
+      "result": {
+        "isError": false,
+        "value": {
+          "status": "ok",
+          "dry_run": true,
+          "applied": 0,
+          "edits_applied": 2,
+          "would_modify": [
+            "<TEST_TMP>/repo/demo.py"
+          ],
+          "files_modified": [],
+          "diffs": {
+            "<TEST_TMP>/repo/demo.py": "--- a/<TEST_TMP>/repo/demo.py\n+++ b/<TEST_TMP>/repo/demo.py\n@@ -1,5 +1,5 @@\n-﻿def total(a, b):\n+﻿def sum_values(a, b):\n     return a + b\n \n def added():\n-    return total(1, 1)\n+    return sum_values(1, 1)\n"
+          },
+          "_graph": {
+            "updated_at": "2026-10-08T09:47:59",
+            "age_seconds": 0,
+            "built_at_sha": "6520a6afbc9311986f75e0cbc54a78c2fa7df8f1",
+            "built_on_branch": "master",
+            "head_sha": "6520a6afbc9311986f75e0cbc54a78c2fa7df8f1",
+            "head_matches_build": true
+          }
+        }
+      }
+    },
+    {
+      "agent": "session-b",
+      "name": "mcp__code_review_graph__apply_refactor_tool",
+      "args": {
+        "refactor_id": "e40c7afb",
+        "dry_run": false
+      },
+      "result": {
+        "isError": false,
+        "value": {
+          "status": "ok",
+          "files_modified": [
+            "<TEST_TMP>\\repo\\demo.py"
+          ],
+          "edits_applied": 2,
+          "graph_update": {
+            "files_updated": 1,
+            "total_nodes": 3,
+            "total_edges": 3,
+            "changed_files": [
+              "demo.py"
+            ],
+            "dependent_files": [],
+            "stale_files_removed": 0,
+            "errors": [],
+            "freshness_advanced": true,
+            "python_resolution": {
+              "files_indexed": 1,
+              "imports_updated": 0,
+              "imports_resolved": 0,
+              "imports_ambiguous": 0
+            },
+            "rescript_resolution": null,
+            "spring_resolution": null,
+            "event_resolution": null,
+            "temporal_resolution": null,
+            "hcl_resolution": null,
+            "scoped_resolution": null,
+            "status": "ok",
+            "build_type": "incremental",
+            "base_resolved": "6520a6afbc9311986f75e0cbc54a78c2fa7df8f1",
+            "summary": "Incremental update: 1 files re-parsed, 3 nodes and 3 edges updated. Changed: ['demo.py']. Dependents also updated: [].",
+            "postprocess_level": "full",
+            "bare_edges_resolved": 0,
+            "cpp_scoped_edges_resolved": 0,
+            "signatures_updated": true,
+            "fts_indexed": 3,
+            "fts_rebuilt": false,
+            "flows_detected": 0,
+            "communities_detected": 0,
+            "summaries_computed": true,
+            "postprocess_timing": {
+              "signatures_s": 0.000737,
+              "fts_s": 0.001451,
+              "flows_s": 0.000295,
+              "communities_s": 0.000054,
+              "summaries_s": 0.002556
+            },
+            "repaired_interrupted_build": false,
+            "_graph": {
+              "updated_at": "2026-10-08T09:48:00",
+              "age_seconds": 0,
+              "built_at_sha": "6520a6afbc9311986f75e0cbc54a78c2fa7df8f1",
+              "built_on_branch": "master",
+              "head_sha": "6520a6afbc9311986f75e0cbc54a78c2fa7df8f1",
+              "head_matches_build": true
+            }
+          }
+        }
+      }
+    },
+    {
+      "agent": "session-b",
+      "name": "mcp__code_review_graph__refactor_tool",
+      "args": {
+        "mode": "rename",
+        "old_name": "sum_values",
+        "new_name": "old_plan"
+      },
+      "result": {
+        "isError": false,
+        "value": {
+          "status": "ok",
+          "summary": "Rename preview: sum_values -> old_plan, 2 edit(s). Use apply_refactor_tool(refactor_id='b228dd86') to apply.",
+          "refactor_id": "b228dd86",
+          "type": "rename",
+          "old_name": "sum_values",
+          "new_name": "old_plan",
+          "edits": [
+            {
+              "file": "<TEST_TMP>/repo/demo.py",
+              "line": 1,
+              "old": "sum_values",
+              "new": "old_plan",
+              "confidence": "high"
+            },
+            {
+              "file": "<TEST_TMP>/repo/demo.py",
+              "line": 5,
+              "old": "sum_values",
+              "new": "old_plan",
+              "confidence": "high"
+            }
+          ],
+          "stats": {
+            "high": 2,
+            "medium": 0,
+            "low": 0
+          },
+          "created_at": 1791424080.4603357,
+          "total": 2,
+          "truncated": false,
+          "_hints": {
+            "next_steps": [
+              {
+                "tool": "query_graph_tool",
+                "suggestion": "Verify call sites before applying a rename"
+              },
+              {
+                "tool": "detect_changes_tool",
+                "suggestion": "Check risk of the refactored code"
+              }
+            ],
+            "related": [],
+            "warnings": []
+          },
+          "_graph": {
+            "updated_at": "2026-10-08T09:48:00",
+            "age_seconds": 0,
+            "built_at_sha": "6520a6afbc9311986f75e0cbc54a78c2fa7df8f1",
+            "built_on_branch": "master",
+            "head_sha": "6520a6afbc9311986f75e0cbc54a78c2fa7df8f1",
+            "head_matches_build": true
+          }
+        }
+      }
+    },
+    {
+      "agent": "session-b",
+      "name": "mcp__code_review_graph__apply_refactor_tool",
+      "args": {
+        "refactor_id": "b228dd86",
+        "dry_run": false
+      },
+      "result": {
+        "isError": true,
+        "error": {
+          "message": "Stale edit in <TEST_TMP>\\repo\\demo.py"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Error: Stale edit in <TEST_TMP>\\repo\\demo.py"
+          }
+        ]
+      }
+    },
+    {
+      "agent": "session-b",
+      "name": "mcp__code_review_graph__build_or_update_graph_tool",
+      "args": {},
+      "result": {
+        "isError": false,
+        "value": {
+          "files_updated": 1,
+          "total_nodes": 2,
+          "total_edges": 1,
+          "changed_files": [
+            "demo.py"
+          ],
+          "dependent_files": [],
+          "stale_files_removed": 0,
+          "errors": [],
+          "freshness_advanced": true,
+          "python_resolution": {
+            "files_indexed": 1,
+            "imports_updated": 0,
+            "imports_resolved": 0,
+            "imports_ambiguous": 0
+          },
+          "rescript_resolution": null,
+          "spring_resolution": null,
+          "event_resolution": null,
+          "temporal_resolution": null,
+          "hcl_resolution": null,
+          "scoped_resolution": null,
+          "status": "ok",
+          "build_type": "incremental",
+          "base_resolved": "6520a6afbc9311986f75e0cbc54a78c2fa7df8f1",
+          "summary": "Incremental update: 1 files re-parsed, 2 nodes and 1 edges updated. Changed: ['demo.py']. Dependents also updated: [].",
+          "postprocess_level": "full",
+          "bare_edges_resolved": 0,
+          "cpp_scoped_edges_resolved": 0,
+          "signatures_updated": true,
+          "fts_indexed": 2,
+          "fts_rebuilt": false,
+          "flows_detected": 0,
+          "communities_detected": 0,
+          "summaries_computed": true,
+          "postprocess_timing": {
+            "signatures_s": 0.000571,
+            "fts_s": 0.001327,
+            "flows_s": 0.000269,
+            "communities_s": 0.000054,
+            "summaries_s": 0.002544
+          },
+          "repaired_interrupted_build": false,
+          "_graph": {
+            "updated_at": "2026-10-08T09:48:00",
+            "age_seconds": 0,
+            "built_at_sha": "6520a6afbc9311986f75e0cbc54a78c2fa7df8f1",
+            "built_on_branch": "master",
+            "head_sha": "6520a6afbc9311986f75e0cbc54a78c2fa7df8f1",
+            "head_matches_build": true
+          }
+        }
+      }
+    },
+    {
+      "agent": "session-b",
+      "name": "mcp__code_review_graph__refactor_tool",
+      "args": {
+        "mode": "rename",
+        "old_name": "replaced_by_user",
+        "new_name": "forbidden"
+      },
+      "result": {
+        "isError": false,
+        "value": {
+          "status": "ok",
+          "summary": "Rename preview: replaced_by_user -> forbidden, 1 edit(s). Use apply_refactor_tool(refactor_id='1de63c5c') to apply.",
+          "refactor_id": "1de63c5c",
+          "type": "rename",
+          "old_name": "replaced_by_user",
+          "new_name": "forbidden",
+          "edits": [
+            {
+              "file": "<TEST_TMP>/repo/demo.py",
+              "line": 1,
+              "old": "replaced_by_user",
+              "new": "forbidden",
+              "confidence": "high"
+            }
+          ],
+          "stats": {
+            "high": 1,
+            "medium": 0,
+            "low": 0
+          },
+          "created_at": 1791424080.945267,
+          "total": 1,
+          "truncated": false,
+          "_hints": {
+            "next_steps": [
+              {
+                "tool": "query_graph_tool",
+                "suggestion": "Verify call sites before applying a rename"
+              },
+              {
+                "tool": "detect_changes_tool",
+                "suggestion": "Check risk of the refactored code"
+              }
+            ],
+            "related": [],
+            "warnings": []
+          },
+          "_graph": {
+            "updated_at": "2026-10-08T09:48:00",
+            "age_seconds": 0,
+            "built_at_sha": "6520a6afbc9311986f75e0cbc54a78c2fa7df8f1",
+            "built_on_branch": "master",
+            "head_sha": "6520a6afbc9311986f75e0cbc54a78c2fa7df8f1",
+            "head_matches_build": true
+          }
+        }
+      }
+    },
+    {
+      "agent": "session-b",
+      "name": "mcp__code_review_graph__apply_refactor_tool",
+      "args": {
+        "refactor_id": "1de63c5c",
+        "dry_run": false
+      },
+      "result": {
+        "isError": true,
+        "error": {
+          "message": "Refactor is denied by read-only policy"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Error: Refactor is denied by read-only policy"
+          }
+        ]
+      }
+    },
+    {
+      "agent": "session-b",
+      "name": "mcp__code_review_graph__build_or_update_graph_tool",
+      "args": {},
+      "result": {
+        "isError": false,
+        "value": {
+          "files_updated": 1,
+          "total_nodes": 3,
+          "total_edges": 3,
+          "changed_files": [
+            "demo.py"
+          ],
+          "dependent_files": [],
+          "stale_files_removed": 0,
+          "errors": [],
+          "freshness_advanced": true,
+          "python_resolution": {
+            "files_indexed": 1,
+            "imports_updated": 0,
+            "imports_resolved": 0,
+            "imports_ambiguous": 0
+          },
+          "rescript_resolution": null,
+          "spring_resolution": null,
+          "event_resolution": null,
+          "temporal_resolution": null,
+          "hcl_resolution": null,
+          "scoped_resolution": null,
+          "status": "ok",
+          "build_type": "incremental",
+          "base_resolved": "6520a6afbc9311986f75e0cbc54a78c2fa7df8f1",
+          "summary": "Incremental update: 1 files re-parsed, 3 nodes and 3 edges updated. Changed: ['demo.py']. Dependents also updated: [].",
+          "postprocess_level": "full",
+          "bare_edges_resolved": 0,
+          "cpp_scoped_edges_resolved": 0,
+          "signatures_updated": true,
+          "fts_indexed": 3,
+          "fts_rebuilt": false,
+          "flows_detected": 0,
+          "communities_detected": 0,
+          "summaries_computed": true,
+          "postprocess_timing": {
+            "signatures_s": 0.000769,
+            "fts_s": 0.001514,
+            "flows_s": 0.00028,
+            "communities_s": 0.000052,
+            "summaries_s": 0.002631
+          },
+          "repaired_interrupted_build": false,
+          "_graph": {
+            "updated_at": "2026-10-08T09:48:01",
+            "age_seconds": 0,
+            "built_at_sha": "6520a6afbc9311986f75e0cbc54a78c2fa7df8f1",
+            "built_on_branch": "master",
+            "head_sha": "6520a6afbc9311986f75e0cbc54a78c2fa7df8f1",
+            "head_matches_build": true
+          }
+        }
+      }
+    },
+    {
+      "agent": "session-b",
+      "name": "mcp__code_review_graph__run_postprocess_tool",
+      "args": {},
+      "result": {
+        "isError": false,
+        "value": {
+          "status": "ok",
+          "bare_edges_resolved": 0,
+          "cpp_scoped_edges_resolved": 0,
+          "signatures_updated": true,
+          "fts_indexed": 3,
+          "flows_detected": 1,
+          "communities_detected": 1,
+          "summary": "Post-processing complete.",
+          "_graph": {
+            "updated_at": "2026-10-08T09:48:01",
+            "age_seconds": 0,
+            "built_at_sha": "6520a6afbc9311986f75e0cbc54a78c2fa7df8f1",
+            "built_on_branch": "master",
+            "head_sha": "6520a6afbc9311986f75e0cbc54a78c2fa7df8f1",
+            "head_matches_build": true
+          }
+        }
+      }
+    }
+  ],
+  "engine": {
+    "baseline": "2.3.9",
+    "commit": "9eba19ffaa60fda02a459a844067e5c190c9013d"
+  },
+  "provenance": "Captured by tests/integration.mjs using unmodified release packages and the real local contribution engine.",
+  "redaction": "Only fixture temporary paths are replaced by <TEST_TMP>. Duplicate rendered text is omitted when result.value is present; values and error content are retained."
+}

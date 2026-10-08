@@ -1,0 +1,8 @@
+{
+  "baseline": "2.3.9",
+  "repository": "https://github.com/sumingwang233/code-review-graph",
+  "commit": "9eba19ffaa60fda02a459a844067e5c190c9013d",
+  "source": "code-review-graph @ https://github.com/sumingwang233/code-review-graph/archive/9eba19ffaa60fda02a459a844067e5c190c9013d.zip",
+  "upstreamBase": "6b12d11625cbec3b6773e076cb3d136464fa90e5",
+  "reason": "Read-only get_refactor_edit_plan_tool is not yet available in an official CRG release."
+}

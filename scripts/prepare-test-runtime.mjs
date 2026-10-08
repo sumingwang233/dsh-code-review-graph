@@ -1,0 +1,10 @@
+import { execFileSync } from 'node:child_process';
+import { mkdirSync } from 'node:fs';
+import { resolve } from 'node:path';
+const version = process.env.DSH_VERSION ?? '0.2.0-rc.2';
+if (!['0.1.5-rc.2', '0.2.0-rc.2'].includes(version)) throw new Error('Unsupported test release');
+const directory = resolve('.cache', `dsh-${version}`);
+mkdirSync(directory, { recursive: true });
+if (!process.env.npm_execpath) throw new Error('Run through npm run prepare:tests');
+execFileSync(process.execPath, [process.env.npm_execpath, 'install', '--prefix', directory, '--no-audit', '--no-fund', `@deepseek-ai/dsh@${version}`], { stdio: 'inherit', windowsHide: true });
+console.log(directory);
