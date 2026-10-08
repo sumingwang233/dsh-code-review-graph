@@ -1,0 +1,20 @@
+{
+  "plugin": "0.1.2",
+  "release": "0.1.5-rc.2",
+  "platform": "win32",
+  "execution": "Native CommandRuntime.execute; real CRG; no model inference",
+  "commands": [
+    {
+      "agent": "session-a",
+      "line": "/crg-graph",
+      "result": {
+        "commandId": "cmd-8d0ea7f9-2",
+        "result": {
+          "kind": "success",
+          "text": "图谱已生成 / Graph generated: C:\\Users\\sumingwang\\AppData\\Local\\Temp\\dsh-crg-integration-IurF5R\\repo\\.code-review-graph\\graph.html"
+        }
+      },
+      "execution": "Native CommandRuntime.execute; real CRG; no model"
+    }
+  ]
+}

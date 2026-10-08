@@ -12,6 +12,7 @@ import { BackendPool, run, valueOf, type Engine } from './backend.ts';
 import { repository, checkedPath, sha256 } from './safety.ts';
 import { commitPlan, type EditPlan } from './refactor.ts';
 import { exposed, groups, publicName, skillWorkflow, type Workflow } from './workflows.ts';
+import { prepare } from './setup.ts';
 
 export const name = 'code-review-graph';
 export const inject = ['tools', 'agents', 'fs', 'sandboxPolicy', 'skills', 'systemPrompt'];
@@ -138,26 +139,55 @@ export async function apply(ctx: Context, config: Configuration): Promise<void> 
     path_from: { type: 'string' }, path_to: { type: 'string' }, depth: { type: 'integer', minimum: 0 }, render_depth: { type: 'integer', minimum: 0 }, max_nodes: { type: 'integer', minimum: 1 },
   }, additionalProperties: false };
   const validateVisualization = ajv.compile(visualizationSchema);
+  async function visualize(args: Record<string, unknown>, agent: NonNullable<ToolRunContext['agent']>, signal: AbortSignal) {
+    const root = await repository(agent.session.header.cwd);
+    signal = AbortSignal.any([signal, life.signal]);
+    const graphUpdate = await pool.ensure(root, agent.id, signal);
+    for (const path of (args.seed_file ?? []) as string[]) await checkedPath(root, path, true);
+    const command = ['visualize', '--repo', root];
+    for (const [key, value] of Object.entries(args)) {
+      const flag = `--${key.replaceAll('_', '-')}`;
+      if (Array.isArray(value)) for (const item of value) command.push(flag, String(item));
+      else if (value === true) command.push(flag);
+      else if (value !== undefined && value !== false) command.push(flag, String(value));
+    }
+    const { log } = await run(engine, command, root, signal);
+    const format = String(args.format ?? 'html');
+    return { status: 'ok', path: join(root, '.code-review-graph', format === 'obsidian' ? 'obsidian' : `graph.${format}`), ...(format === 'html' ? { sidebar: 'code-review-graph' } : {}), ...(graphUpdate ? { graph_update: graphUpdate } : {}), log };
+  }
+
+  // Native human commands reuse DSH's session/Agent lookup, cancellation and command history.
+  // They never send a prompt or tool request to a model.
+  let preparation: Promise<void> | undefined;
+  const prepareDefault = (signal: AbortSignal) => {
+    if (config.engineCommand !== join(engineDir, process.platform === 'win32' ? 'Scripts/code-review-graph.exe' : 'bin/code-review-graph') || config.engineArgs.length) {
+      throw new Error('A custom engine is configured. Prepare that engine, or restore the default engine configuration. / 当前配置了自定义引擎，请准备该引擎或恢复默认配置。');
+    }
+    return preparation ??= prepare(undefined, undefined, { signal: AbortSignal.any([signal, life.signal]) }).finally(() => { preparation = undefined; });
+  };
+  type HumanInvocation = { agent: NonNullable<ToolRunContext['agent']>; signal: AbortSignal; rawInput: string };
+  ctx.inject(['commands'], scope => {
+    const commands = scope.get('commands') as { register(definition: { name: string; description: string; handler: (invocation: HumanInvocation) => Promise<{ kind: 'success'; text: string }> }): () => void };
+    scope.effect(() => commands.register({ name: 'crg-setup', description: '准备本地图谱引擎 / Prepare the local graph engine', handler: async ({ signal, rawInput }) => {
+      if (rawInput.trim()) throw new Error('/crg-setup does not need parameters / 无需填写参数');
+      await prepareDefault(signal);
+      return { kind: 'success', text: '图谱引擎已准备好。打开右侧代码图谱，点击生成图谱。 / Engine ready. Open Code graph and click Generate graph.' };
+    } }));
+    scope.effect(() => commands.register({ name: 'crg-graph', description: '生成／更新交互代码图谱，无需模型 / Generate or update the interactive code graph without a model', handler: async ({ agent, signal, rawInput }) => {
+      if (rawInput.trim()) throw new Error('/crg-graph does not need parameters / 无需填写参数');
+      await repository(agent.session.header.cwd);
+      if (config.engineCommand === join(engineDir, process.platform === 'win32' ? 'Scripts/code-review-graph.exe' : 'bin/code-review-graph') && !config.engineArgs.length) await prepareDefault(signal);
+      const result = await visualize({ mode: 'full', format: 'html' }, agent, signal);
+      return { kind: 'success', text: `图谱已生成 / Graph generated: ${result.path}${result.graph_update ? '\n解析警告 / Parse warnings: ' + JSON.stringify(result.graph_update) : ''}` };
+    } }));
+  });
   ctx.effect(() => ctx.tools.register({ name: 'crg_visualize', description: 'Generate the local interactive graph for the DSH Code graph sidebar, or export HTML, JSON, GraphML, Cypher, Obsidian or SVG. Supports file, community, symbol, changed-code, flow and shortest-path views.',
     parameters: visualizationSchema, output,
     timeoutMs: config.timeoutMs,
     execute: async (value, exec) => {
       if (!validateVisualization(value)) throw new Error(ajv.errorsText(validateVisualization.errors));
-      const args = value as Record<string, unknown>;
-      const root = await rootFor(exec);
-      const signal = AbortSignal.any([exec.signal, life.signal]);
-      await pool.ensure(root, exec.agent!.id, signal);
-      for (const path of (args.seed_file ?? []) as string[]) await checkedPath(root, path, true);
-      const command = ['visualize', '--repo', root];
-      for (const [key, value] of Object.entries(args)) {
-        const flag = `--${key.replaceAll('_', '-')}`;
-        if (Array.isArray(value)) for (const item of value) command.push(flag, String(item));
-        else if (value === true) command.push(flag);
-        else if (value !== undefined && value !== false) command.push(flag, String(value));
-      }
-      const { log } = await run(engine, command, root, signal);
-      const format = String(args.format ?? 'html');
-      return { status: 'ok', path: join(root, '.code-review-graph', format === 'obsidian' ? 'obsidian' : `graph.${format}`), ...(format === 'html' ? { sidebar: 'code-review-graph' } : {}), log };
+      if (!exec.agent) throw new Error('Graph tools require a session-owned agent');
+      return visualize(value as Record<string, unknown>, exec.agent, exec.signal);
     },
   }));
   const promptNames = ['review_changes', 'architecture_map', 'debug_issue', 'onboard_developer', 'pre_merge_check'];
@@ -179,7 +209,7 @@ export async function apply(ctx: Context, config: Configuration): Promise<void> 
   ctx.on('agent/disposed', ({ agent }) => { masks.get(agent.id)?.(); masks.delete(agent.id); return pool.release(agent.id); });
   for (const agent of ctx.agents.list()) switchWorkflow(agent);
   ctx.effect(() => ctx.systemPrompt.section({ name: 'code-review-graph', order: 80, interpolate: false,
-    text: 'Use crg_workflow to reveal task-specific local code graph tools, then get_minimal_context_tool before broader queries. Prefer minimal detail. crg_visualize opens the local graph in the Code graph sidebar. Refactors use session filesystem permissions.' }));
+    text: 'Use crg_workflow to reveal task-specific local code graph tools, then get_minimal_context_tool before broader queries. Prefer minimal detail. crg_visualize generates a local graph for the Code graph sidebar; users can also generate it directly from that page without a model. Refactors use session filesystem permissions.' }));
 
   const skillsDir = new URL('../skills/', import.meta.url);
   for (const slug of await readdir(skillsDir)) {

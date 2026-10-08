@@ -34,7 +34,7 @@ test('real workers share a canonical repository and terminate with their final o
 test('missing engine reports explicit preparation; no download is attempted', { timeout: 15000 }, async () => {
   const root = await realpath(await mkdtemp(join(tmpdir(), 'dsh-crg-missing-')));
   const pool = new BackendPool({ command: join(root, 'missing-crg'), args: [], timeoutMs: 1000 });
-  try { await assert.rejects(pool.ensure(root, 'a', new AbortController().signal), /prepare explicitly/); }
+  try { await assert.rejects(pool.ensure(root, 'a', new AbortController().signal), /Set up engine.*crg-setup/); }
   finally { await pool.dispose(); }
 });
 

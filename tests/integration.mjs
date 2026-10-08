@@ -26,6 +26,8 @@ test(`Released DSH ${version}: real session, real CRG, deterministic tools, no m
   ]);
   const ctx = new Context();
   await ctx.plugin(Prompt, {}); await ctx.plugin(Tools); await ctx.plugin(Agents); await ctx.plugin(Skills); await ctx.plugin(Sessions); await ctx.plugin(Projections); await ctx.plugin(Fs, {}); await ctx.plugin(Policy, { mode: 'workspace-write', workspaceRoot: root });
+  const { default: Commands } = await load('dsh-commands');
+  await ctx.plugin(Commands);
   const crg = ctx.plugin(plugin, { engineCommand: process.env.CRG_COMMAND, engineArgs: [], timeoutMs: 120000, authorizedRepos: [sibling], embeddingProviders: ['local'], embeddingEnv: [] });
   await crg;
   const skillNames = (await ctx.skills.list()).map(s => s.name).filter(n => n.startsWith('crg-'));
@@ -53,6 +55,13 @@ test(`Released DSH ${version}: real session, real CRG, deterministic tools, no m
   const data = result => { assert.notEqual(result.isError, true, JSON.stringify(result)); return JSON.parse(result.content.find(c => c.type === 'text').text); };
   try {
     const a = await makeAgent('session-a'), b = await makeAgent('session-b');
+    assert.ok(ctx.commands.list(a).some(command => command.name === 'crg-graph'));
+    assert.ok(ctx.commands.list(a).some(command => command.name === 'crg-setup'));
+    await assert.rejects(ctx.commands.execute(a, '/crg-graph ../another-repository', [], new AbortController().signal), /does not need parameters/);
+    const directGraph = await ctx.commands.execute(a, '/crg-graph', [], new AbortController().signal);
+    assert.equal(directGraph.result.kind, 'success');
+    assert.ok((await readFile(join(root, '.code-review-graph/graph.html'), 'utf8')).includes('<html'));
+    transcript.commands = [{ agent: a.id, line: '/crg-graph', result: directGraph, execution: 'Native CommandRuntime.execute; real CRG; no model' }];
     assert.equal((await invoke(a, publicName('list_graph_stats_tool'))).isError, true);
     data(await invoke(a, 'crg_workflow', { workflow: 'context' }));
     assert.equal((await invoke(b, publicName('list_graph_stats_tool'))).isError, true, 'workflow must be Agent-local');

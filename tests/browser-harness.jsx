@@ -12,7 +12,9 @@ const { apply } = window.crgClient;
 let descriptor, body;
 const undo = [];
 const bytes = path => Uint8Array.from(atob(window.assets[path.split('/').at(-1)]), c => c.charCodeAt(0));
-const response = path => ({ ok: true, value: { data: window.readerVersion === 'old' ? window.assets[path.split('/').at(-1)] : bytes(path) } });
+const response = path => window.graphAvailable === false
+  ? { ok: false, error: { message: 'Graph has not been generated' } }
+  : { ok: true, value: { data: window.readerVersion === 'old' ? window.assets[path.split('/').at(-1)] : bytes(path) } };
 const reader = window.readerVersion === 'old'
   ? { readAll: async (_session, path) => response(path), readRelated: async (_session, _base, path) => response(path) }
   : { readBytes: async (_session, path) => response(path) };
@@ -20,7 +22,13 @@ const ctx = {
   effect: fn => { const dispose = fn(); if (typeof dispose === 'function') undo.push(dispose); return dispose; },
   sidebarRightTabs: { register: value => { descriptor = value; return () => {}; } },
   slots: { inject: (_name, fn) => fn(), register: (options, component) => { body = { options, component }; return () => {}; } },
-  remote: { workspaceFiles: reader },
+  remote: { workspaceFiles: reader, commands: { execute: async (sessionId, line, attachments, signal) => {
+    window.commandCalls ??= []; window.commandCalls.push({ sessionId, line, attachments });
+    if (window.commandPending) await new Promise((resolve, reject) => signal.addEventListener('abort', () => reject(signal.reason), { once: true }));
+    if (window.commandFailure) return { ok: true, value: { result: { kind: 'error', text: window.commandFailure } } };
+    if (line === '/crg-graph') window.graphAvailable = true;
+    return { ok: true, value: { result: { kind: 'success', text: 'Graph ready' } } };
+  } } },
 };
 apply(ctx);
 if (body.options.key !== descriptor.id) throw new Error('Sidebar body must register under the native tab provider ID');

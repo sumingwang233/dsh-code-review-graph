@@ -4,6 +4,11 @@ import { mkdtemp, readFile } from 'node:fs/promises';
 import { join, resolve } from 'node:path';
 import { tmpdir } from 'node:os';
 import { execFileSync } from 'node:child_process';
+import { prepare } from '../dist/setup.js';
+test('cancelled preparation stops before launching installers', async () => {
+  const controller = new AbortController(); controller.abort(new Error('fixture cancellation'));
+  await assert.rejects(prepare(undefined, undefined, { signal: controller.signal }), /fixture cancellation/);
+});
 test('explicit dependency preparation uses an isolated, repeatable engine', { timeout: 180000 }, async () => {
   const home = await mkdtemp(join(tmpdir(), 'dsh-crg-setup-'));
   const env = { ...process.env, DSH_HOME: home };

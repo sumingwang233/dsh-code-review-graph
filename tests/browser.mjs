@@ -25,10 +25,14 @@ test(`Web/Desktop client graph, ${version} asset reader`, { timeout: 120000 }, a
       const assets = {};
       for (const name of await readdir(directory)) if (/\.html$|\.js$/.test(name)) assets[name] = (await readFile(join(directory, name))).toString('base64');
       await page.setContent('<div id="root" style="height:100vh"></div>');
-      await page.evaluate(({ assets, old }) => { window.assets = assets; window.readerVersion = old ? 'old' : 'new'; }, { assets, old: version === '0.1.5-rc.2' });
+      await page.evaluate(({ assets, old, mode }) => { window.assets = assets; window.readerVersion = old ? 'old' : 'new'; window.graphAvailable = mode !== 'full'; window.commandCalls = []; }, { assets, old: version === '0.1.5-rc.2', mode });
       await page.addScriptTag({ content: bundle.outputFiles[0].text });
       await page.addScriptTag({ content: client });
       await page.evaluate(() => window.mountGraph());
+      if (mode === 'full') {
+        await page.getByRole('button', { name: '准备引擎并生成图谱 / Set up and generate graph' }).click();
+        assert.deepEqual(await page.evaluate(() => window.commandCalls), [{ sessionId: 'fixture-session', line: '/crg-graph', attachments: [] }]);
+      }
       const frame = page.frameLocator('iframe');
       await frame.locator('#stats-bar').waitFor();
       const svg = frame.locator('#graph-svg'); await svg.waitFor();
@@ -62,12 +66,24 @@ test(`Web/Desktop client graph, ${version} asset reader`, { timeout: 120000 }, a
       const exported = page.waitForEvent('download');
       await page.getByRole('button', { name: 'Export HTML / 导出 HTML' }).click();
       assert.equal((await exported).suggestedFilename(), 'code-review-graph.html');
+      if (mode === 'full') {
+        await page.evaluate(() => { window.commandFailure = 'fixture engine failure'; });
+        await page.getByRole('button', { name: '更新图谱 / Update graph' }).click();
+        await page.getByRole('alert').filter({ hasText: 'fixture engine failure' }).waitFor();
+        await page.evaluate(() => { window.commandFailure = undefined; window.commandPending = true; });
+        await page.getByRole('button', { name: '更新图谱 / Update graph' }).click();
+        await page.getByRole('button', { name: '取消 / Cancel' }).click();
+        await page.getByRole('status').filter({ hasText: '已取消' }).waitFor();
+        await page.evaluate(() => { window.commandPending = false; });
+        await page.getByRole('button', { name: '更新图谱 / Update graph' }).click();
+        await page.getByRole('status').filter({ hasText: 'Graph ready' }).waitFor();
+      }
       await mkdir('test-results', { recursive: true });
       await page.screenshot({ path: resolve('test-results', `graph-${mode}-${version}-${process.platform}.png`) });
     }
     assert.deepEqual(escaped, [], 'Graph must make no network requests');
     assert.deepEqual(errors, [], 'Graph renderer must have no page errors');
-    await writeFile(`test-results/browser-${version}-${process.platform}.json`, JSON.stringify({ release: version, surface: 'native Web/Desktop client contribution mounted with workspace-reader fixture', views: ['full', 'file', 'community'], checked: ['sidebar-kind registration', 'offline asset inlining', 'search', 'filters', 'zoom', 'drag', 'community drill/back', 'HTML download', 'sandbox'], networkRequests: escaped, pageErrors: errors }, null, 2));
+    await writeFile(`test-results/browser-${version}-${process.platform}.json`, JSON.stringify({ release: version, surface: 'native Web/Desktop client contribution mounted with workspace-reader and command fixtures', views: ['full', 'file', 'community'], checked: ['sidebar-kind registration', 'first-use generation button', 'command failure/cancellation/retry', 'offline asset inlining', 'search', 'filters', 'zoom', 'drag', 'community drill/back', 'HTML download', 'sandbox'], networkRequests: escaped, pageErrors: errors }, null, 2));
   } catch (error) {
     await page.screenshot({ path: resolve('test-results', `graph-failure-${version}.png`) });
     throw new Error(`${String(error)}; UI: ${(await page.locator('body').innerText()).slice(0, 2000)}; page errors: ${errors.join('; ')}`);

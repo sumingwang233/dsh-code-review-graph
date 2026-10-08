@@ -1,5 +1,25 @@
 # Validation / 验证记录
 
+## 0.1.2 发行验证
+
+0.1.2 的验证记录作为 [v0.1.2 发行页](https://github.com/sumingwang233/dsh-code-review-graph/releases/tag/v0.1.2)
+附件保存，包含发行包 SHA-256、GitHub CI 结果和真实 Windows Desktop 证据。
+
+- 两版真实 DSH 会话增加原生 `CommandRuntime.execute('/crg-graph')`，调用真实引擎，拒绝额外目录参数。
+- 浏览器测试执行发行 Client，覆盖首次生成按钮、失败、取消、重试及原有图谱交互。
+- 真实 Windows Desktop 0.2.0-rc.2 从空隔离引擎目录开始，通过图谱页按钮准备固定版本引擎，
+  生成图谱，再经真实工作区文件接口读取、搜索和导出。测试不再提前用 CLI 生成图谱。
+- Windows/Linux/macOS × DSH 0.1.5-rc.2、0.2.0-rc.2 的六项 CI 覆盖会话、浏览器、CLI 生命周期及依赖准备。
+- 无真实模型推理；其他 Desktop 平台及版本未整机实测。原安装器超时仍未复现。
+
+Release 0.1.2 evidence is attached to its release page, including the exact tarball hash,
+six-job compatibility CI and the actual Windows Desktop run. Native commands run
+the real engine without a model. Desktop setup/generation is driven by the native
+button from an empty isolated engine directory. Browser command services remain
+fixtures; they test the published Client, including failure/cancellation/retry.
+
+## 0.1.1 验证快照 / Previous release snapshot
+
 Local checkpoint: **2026-10-08**, Windows, Node **24.14.1**, Python **3.11.16**.
 CRG base **2.3.9**; exact contribution engine commit is in `engine.json`.
 DSH packages are the real published releases **0.1.5-rc.2** and **0.2.0-rc.2**.

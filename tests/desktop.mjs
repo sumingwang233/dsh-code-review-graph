@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { _electron as electron } from '@playwright/test';
 import { mkdtemp, mkdir, readFile, writeFile, copyFile, realpath } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
-import { join, resolve } from 'node:path';
+import { join, resolve, dirname, delimiter } from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { scrubEnv, sha256, contained } from '../dist/safety.js';
 const version = process.env.DSH_VERSION ?? '0.2.0-rc.2';
@@ -20,6 +20,9 @@ test(`Real DSH Desktop ${version}: published package install, enable, native gra
   const home = join(dir, 'home'), profile = join(home, 'profiles', 'desktop');
   await writeFile(join(home, 'cordis.patch.yml'), '- id: ui-settings-account\n  config:\n    version: 1\n    step: done\n    completion: skipped\n');
   const env = { ...scrubEnv(process.env), DSH_HOME: home, APPDATA: join(dir, 'appdata'), USERPROFILE: join(dir, 'user'), HOME: join(dir, 'user') };
+  // Reuse an existing real Python; engine installation still happens through the native UI.
+  const pathKey = Object.keys(env).find(key => key.toUpperCase() === 'PATH') ?? 'PATH';
+  env[pathKey] = dirname(process.env.CRG_COMMAND) + delimiter + (env[pathKey] ?? '');
   const fixture = process.env.DSH_DESKTOP_PROFILE_FIXTURE;
   if (fixture) {
     await mkdir(profile, { recursive: true });
@@ -128,10 +131,18 @@ test(`Real DSH Desktop ${version}: published package install, enable, native gra
     }), { sessionId, cwd });
     execFileSync('git', ['init', cwd], { stdio: 'pipe', windowsHide: true });
     await writeFile(join(cwd, 'demo.py'), 'def total(a, b):\n    return a + b\n\ndef main():\n    return total(2, 3)\n');
-    for (const args of [['build', '--repo', cwd], ['visualize', '--repo', cwd, '--mode', 'full']]) execFileSync(process.env.CRG_COMMAND, args, { env: scrubEnv(process.env), timeout: 90000, stdio: 'pipe', windowsHide: true });
     await page.evaluate(sessionId => new Promise(resolve => {
       window.__crgDesktopContext.inject(['sidebarRight'], ctx => { ctx.sidebarRight.openTabIn(sessionId, 'code-review-graph'); resolve(); });
     }), sessionId);
+    const commandResponse = page.waitForResponse(r => new URL(r.url()).pathname.endsWith('/commands/execute'), { timeout: 150000 });
+    await page.getByRole('button', { name: '准备引擎并生成图谱 / Set up and generate graph' }).click();
+    const command = await (await commandResponse).json();
+    assert.equal(command.result.ok, true, JSON.stringify(command));
+    assert.equal(command.result.value.result.kind, 'success', JSON.stringify(command));
+    const engineStamp = JSON.parse(await readFile(join(home, 'code-review-graph/engine/dsh-crg-source.json'), 'utf8'));
+    assert.equal(engineStamp.source, JSON.parse(await readFile('engine.json', 'utf8')).source);
+    evidence.operations.push({ endpoint: 'commands/execute', line: '/crg-graph', result: command.result.value });
+    evidence.enginePreparation = { nativeButton: true, isolated: true, pinnedSource: engineStamp.source };
     const frame = page.frameLocator('iframe[title="Interactive code graph / 交互代码图谱"]');
     await frame.locator('#graph-svg circle, #graph-svg .node-shape').first().waitFor({ timeout: 20000 });
     await frame.locator('#search').fill('total'); await frame.locator('.sr-item').first().waitFor();
@@ -154,7 +165,7 @@ test(`Real DSH Desktop ${version}: published package install, enable, native gra
     }
     evidence.download = await app.evaluate(() => globalThis.__crgDownload);
     assert.ok(exported?.includes('graph-svg'), `Native Electron export must save a complete graph HTML file: ${JSON.stringify(evidence.download)}`);
-    evidence.graph = { nativeSidebar: true, actualWorkspaceReader: true, search: true, export: true };
+    evidence.graph = { nativeSidebar: true, nativeGenerationButton: true, actualWorkspaceReader: true, search: true, export: true };
     await page.getByRole('button', { name: /^(插件|Plugins)$/ }).click();
     async function remove() {
       const card = page.getByRole('button', { name: /^(查看|View) dsh-code-review-graph$/ });
