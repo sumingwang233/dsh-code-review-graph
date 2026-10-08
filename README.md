@@ -47,7 +47,67 @@ node dist/setup.js prepare ../code-review-graph
 
 ## 使用
 
-会话工作目录必须是本地 Git 或 SVN 仓库。先调用 `crg_workflow` 选择：
+### 桌面端第一次使用
+
+1. 在插件管理器确认版本为 **0.1.1**，插件和其中的 `code-review-graph` 组件均已启用。
+   “运行中”表示 DSH 组件已启动，不表示 Python 图谱引擎已经准备好。
+2. 在系统终端运行一次下面的命令，主动准备 Python 引擎。这里明确使用官方 npm 源，避免镜像版本滞后：
+
+   ```sh
+   npx --yes --registry=https://registry.npmjs.org dsh-code-review-graph@0.1.1 prepare
+   ```
+
+   需要 uv 或真实 Python 3.10+，首次准备需要下载引擎及依赖。若桌面应用使用自定义
+   `DSH_HOME`，准备命令也必须使用相同的目录；否则会把引擎装到另一个位置。
+3. 在 DSH 选择你的项目工作区，在本地 Git／SVN 仓库中新建会话。
+   只在终端里 `cd` 到项目不会改变已有会话绑定的工作目录。
+4. 将下面的**普通聊天提示词**发给模型：
+
+   ```text
+   请使用 code-review-graph 分析当前仓库。先调用 crg_workflow，参数为 {"workflow":"context"}；
+   再调用 mcp__code_review_graph__get_minimal_context_tool，参数为 {"task":"介绍当前仓库的入口、核心模块和调用关系","base":"HEAD"}。
+   根据实际工具结果回答；工具不可用或引擎未准备时，请报告具体错误。
+   ```
+
+首次图谱查询会自动建图。聊天里应出现实际工具调用记录；模型只在文字中提到工具名，
+不能证明它已经执行了工具。新建且没有提交的 Git 仓库应先完成初始提交再使用含 `HEAD` 的示例。
+
+### `@`、`/` 和工具名的区别
+
+本插件没有注册 `@dsh-code-review-graph` 引用目标，也没有 `/crg_workflow`、`/crg_visualize`
+或 `/dsh-code-review-graph` 命令。`crg_workflow`、`crg_prompt`、`crg_visualize` 是供模型调用的工具，
+可以通过上面的自然语言提示词明确要求模型使用。
+
+**斜杠入口是七个 `crg-` 前缀的技能**。在会话输入框键入 `/crg-` 搜索，也可在消息开头
+直接写完整技能名，再接任务描述，例如：
+
+```text
+/crg-explore-codebase 介绍当前仓库的入口和核心模块。
+```
+
+```text
+/crg-review-changes 请审查当前未提交改动，以 HEAD 为基准，指出风险和缺失测试。
+```
+
+| 技能 | 用途 |
+| --- | --- |
+| `/crg-build-graph` | 建立／更新图谱并分析结构 |
+| `/crg-explore-codebase` | 探索模块、依赖和调用关系 |
+| `/crg-review-changes` | 审查代码变化 |
+| `/crg-review-delta` | 对后续修改做增量复查 |
+| `/crg-review-pr` | 审查 PR 或分支差异 |
+| `/crg-debug-issue` | 沿调用关系定位问题 |
+| `/crg-refactor-safely` | 规划、预览和受控重构 |
+
+技能目录由 DSH 按会话缓存；安装、启用或升级后，先新建会话再搜索。菜单中应搜索 `crg-`，
+不是 npm 包名。若仍无候选，先用上面的普通提示词确认 `crg_workflow` 是否实际可用。
+DSH 的两版基线均提供技能斜杠入口，见官方源码
+[0.1.5-rc.2](https://github.com/deepseek-ai/deepseek-harness/blob/dsh-v0.1.5-rc.2/packages/client/ui-skill/src/client/index.ts)、
+[0.2.0-rc.2](https://github.com/deepseek-ai/deepseek-harness/blob/dsh-v0.2.0-rc.2/packages/client/ui-skill/src/client/index.ts)。
+
+### 工作流和常用任务
+
+需要明确选择工具范围时，在聊天中要求模型调用 `crg_workflow`，指定下面的 `workflow` 参数：
 
 | 工作流 | 用途 |
 | --- | --- |
@@ -62,11 +122,29 @@ node dist/setup.js prepare ../code-review-graph
 原工具名使用 `mcp__code_review_graph__` 前缀。`crg_prompt` 加载原有五个工作流并展开对应工具；
 七个技能注册为 `crg-<原技能名>`。
 
+另外两个可直接复制的普通聊天提示词：
+
+```text
+请调用 crg_prompt，参数为 {"name":"review_changes","base":"main"}，按返回的工作流审查当前分支的改动。
+```
+
+```text
+请调用 crg_visualize，参数为 {"mode":"full","format":"html"}，生成当前仓库的交互代码图谱，并告诉我生成文件的路径。
+```
+
+`main` 要换成仓库实际存在的目标分支；审查当前未提交改动可用 `HEAD`。
+原有上下文／变化工具的默认基准是 `HEAD~1`，并不等同于只看未提交改动，因此需要时应明确指定。
+
 首次图谱调用自动建图，之后增量监听。相同仓库的活跃 Agent 共享后端及监听进程；
 最后一个 Agent 释放后清理进程。取消或超时会停止该仓库的共享后端；后续调用重新建立连接，
 因此同仓库的并发调用也可能收到中断结果。失败和解析警告保留在结果中。
 
-调用 `crg_visualize` 后打开右侧 **Code graph / 代码图谱** 页面，并点击刷新。
+### 打开交互图谱
+
+`crg_visualize` 生成 `.code-review-graph/graph.html` 后，在**同一会话**打开右侧栏，
+通过“新标签页”的“开始”页面选择 **Code graph / 代码图谱**，再点击 **Refresh / 刷新**。
+工具负责生成文件，图谱页需要手动打开；只完成建图、尚未生成 HTML 时不会有可显示的页面。
+右侧入口缺失时检查是否仍安装了 0.1.0，以及新版 Client 是否已启用。
 原渲染器的搜索、过滤、缩放、拖动、聚合、调用路径和下载保持可用。
 支持 `mode`、文件／符号／变更／执行流种子、`path_from`／`path_to` 和深度；
 `format` 可选 `html`、`json`、`graphml`、`cypher`、`obsidian`、`svg`。
@@ -77,6 +155,31 @@ node dist/setup.js prepare ../code-review-graph
 
 图谱资产通过 DSH 已有工作区文件读取接口取得，兼容两版接口差异。
 本地资源内联到限制权限的 iframe；不启动固定端口服务器、不公开数据库目录。
+
+### 安装了新版，管理器为什么仍显示 0.1.0？
+
+先区分实际安装版本和界面缓存。默认桌面 profile 的实际包信息位于：
+
+```text
+~/.dsh/profiles/desktop/node_modules/dsh-code-review-graph/package.json
+```
+
+查看其中的 `version`；profile 自己的 `package.json` 只记录版本范围，例如 `^0.1.0`，
+该范围允许 0.1.1，但不能证明实际已经升级。安装日志也应明确记录 0.1.1。
+
+官方 npm 的 `latest` 和 npmmirror 的 `latest` 可能不同。镜像未同步时，输入不带版本号的包名
+可能仍装到 0.1.0；在普通目录执行 `npm install` 也不会更新应用持有的桌面 profile。
+使用桌面原生管理器卸载旧版，再安装明确的 `dsh-code-review-graph@0.1.1`。
+若源里还没有这个版本，可按以下方式安装已验证的本地包：
+
+1. 从 [v0.1.1 发行页](https://github.com/sumingwang233/dsh-code-review-graph/releases/tag/v0.1.1)
+   下载 `dsh-code-review-graph-0.1.1.tgz`，无需解压。
+2. 在桌面管理器的“添加插件”包地址输入文件的**绝对路径**，例如
+   `D:\Downloads\dsh-code-review-graph-0.1.1.tgz`，完成安装并点击“立即启用”。
+3. 核对实际包的 `version` 为 0.1.1，再新建会话。不要用外部 CLI 修改 `desktop` profile。
+
+如果实际包已经是 0.1.1，才考虑管理器元数据尚未刷新；保存当前工作后重新打开应用再核对。
+引擎未准备的错误用前面的 `prepare` 解决，重新安装 JavaScript 插件不会自动安装 Python 引擎。
 
 ## 权限和重构
 

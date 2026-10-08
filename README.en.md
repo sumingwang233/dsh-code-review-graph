@@ -48,11 +48,93 @@ node dist/setup.js prepare ../code-review-graph
 
 ## Workflows and graph
 
-Start a session in a local Git/SVN repository. Call `crg_workflow` with `context`,
+### First use on Desktop
+
+1. Confirm **0.1.1** in the native plugin manager and enable both the bundle and
+   its `code-review-graph` component. “Running” describes the DSH component; it
+   does not confirm that the Python engine has been prepared.
+2. Run this once in a system terminal. The explicit official npm registry avoids
+   a mirror serving an older package:
+
+   ```sh
+   npx --yes --registry=https://registry.npmjs.org dsh-code-review-graph@0.1.1 prepare
+   ```
+
+   This requires uv or real Python 3.10+ and downloads the engine/dependencies on
+   first preparation. If Desktop uses a custom `DSH_HOME`, the command must use
+   the same directory.
+3. Select your project workspace in DSH and create a session in its local Git/SVN
+   repository. Running `cd` in a terminal does not change an existing session's
+   repository binding.
+4. Send this as an **ordinary chat message**:
+
+   ```text
+   Use code-review-graph to analyze this repository. Call crg_workflow with {"workflow":"context"},
+   then mcp__code_review_graph__get_minimal_context_tool with {"task":"Explain the entry points, core modules and call relationships","base":"HEAD"}.
+   Answer from actual tool results. Report the specific error if the tools or engine are unavailable.
+   ```
+
+The first graph query builds the graph automatically. Look for actual tool-call
+records; mentioning a tool in prose does not establish that it ran. A new Git
+repository needs an initial commit before using examples that refer to `HEAD`.
+
+### Mentions, slash skills and model tools
+
+There is no `@dsh-code-review-graph` mention target and no `/crg_workflow`,
+`/crg_visualize` or `/dsh-code-review-graph` command. `crg_workflow`, `crg_prompt`
+and `crg_visualize` are model tools. Ask the model to invoke them using the chat
+examples here.
+
+The **seven skills use `/crg-…` names**. Search `/crg-` in the session input, or
+type the full skill name at the beginning of a message followed by your task:
+
+```text
+/crg-explore-codebase Explain this repository's entry points and core modules.
+```
+
+```text
+/crg-review-changes Review uncommitted changes against HEAD; identify risks and missing tests.
+```
+
+| Skill | Purpose |
+| --- | --- |
+| `/crg-build-graph` | Build/update the graph and analyze structure |
+| `/crg-explore-codebase` | Explore modules, dependencies and calls |
+| `/crg-review-changes` | Review code changes |
+| `/crg-review-delta` | Review subsequent changes incrementally |
+| `/crg-review-pr` | Review a PR or branch diff |
+| `/crg-debug-issue` | Trace a problem through call relationships |
+| `/crg-refactor-safely` | Plan, preview and apply controlled refactors |
+
+DSH caches the skill catalog per session. Create a new session after installing,
+enabling or upgrading; search for `crg-`, rather than the npm package name. If
+the menu is still empty, use the ordinary chat example above to check whether
+`crg_workflow` is actually available. Both supported releases provide slash
+skills: official source for
+[0.1.5-rc.2](https://github.com/deepseek-ai/deepseek-harness/blob/dsh-v0.1.5-rc.2/packages/client/ui-skill/src/client/index.ts)
+and [0.2.0-rc.2](https://github.com/deepseek-ai/deepseek-harness/blob/dsh-v0.2.0-rc.2/packages/client/ui-skill/src/client/index.ts).
+
+### Workflow selection and common tasks
+
+Ask the model to call `crg_workflow` with `context`,
 `review`, `refactor`, `export`, `advanced`, or `all`. Restrictions are Agent-local
 and affect only this plugin's tools. Original tools use the
 `mcp__code_review_graph__` prefix. `crg_prompt` loads any of the original five
 workflows and reveals the corresponding tools; skills use `crg-<original-name>`.
+
+Two more ordinary chat examples:
+
+```text
+Call crg_prompt with {"name":"review_changes","base":"main"} and follow the returned workflow to review this branch.
+```
+
+```text
+Call crg_visualize with {"mode":"full","format":"html"} to generate this repository's interactive graph, then report the generated path.
+```
+
+Replace `main` with an existing target branch; use `HEAD` for uncommitted changes.
+The original context/change tools default to `HEAD~1`, which does not mean only
+uncommitted changes. Specify the comparison ref when it matters.
 
 First use builds the graph; subsequent file changes are indexed incrementally.
 Active Agents in the same canonical repository share workers and watchers. The
@@ -60,8 +142,14 @@ last owner releases them. A cancelled or timed-out call stops that repository's
 shared worker; another concurrent call may also be interrupted. Later calls
 reconnect. Failures and partial parsing warnings are retained in results.
 
-Call `crg_visualize`, open **Code graph / 代码图谱** in the right sidebar, then
-refresh. The original renderer retains search, filters, zoom, dragging,
+### Open the interactive graph
+
+After `crg_visualize` generates `.code-review-graph/graph.html`, open the right
+sidebar in the **same session**. Choose **Code graph / 代码图谱** from the
+**New tab → Start** page, then **Refresh / 刷新**. The tool generates a file;
+open the view manually. Building the graph alone does not generate its HTML.
+If the entry is missing, check that 0.1.0 has been replaced and the new Client is
+enabled. The original renderer retains search, filters, zoom, dragging,
 aggregation, paths and downloads. Supported options include `mode`,
 file/symbol/changed-code/flow seeds, `path_from`/`path_to`, depth and node limits.
 Export formats: HTML, JSON, GraphML, Cypher, Obsidian and SVG (optional engine
@@ -75,6 +163,38 @@ Assets use DSH's existing workspace file reader, adapting only the two released
 reader interfaces. Local assets are inlined into an iframe with scripts and
 downloads enabled, without same-origin or network privilege. No fixed-port
 server is started and no graph-database directory is exposed.
+
+### Why does Desktop still show 0.1.0 after an upgrade?
+
+Check the actual installed package before assuming stale UI metadata. The
+default Desktop profile's installed manifest is:
+
+```text
+~/.dsh/profiles/desktop/node_modules/dsh-code-review-graph/package.json
+```
+
+Its `version` is the installed version. The profile's own `package.json` records
+a range such as `^0.1.0`: that range permits 0.1.1 but does not prove an upgrade.
+Installation logs should also name 0.1.1 explicitly.
+
+Official npm and npmmirror can have different `latest` versions. An unversioned
+package name may still resolve to 0.1.0 on a stale mirror. An `npm install` in an
+ordinary directory also does not update the application-owned Desktop profile.
+Remove the old version through the native manager, then install the exact spec
+`dsh-code-review-graph@0.1.1`. If your source lacks that version:
+
+1. Download `dsh-code-review-graph-0.1.1.tgz` from the
+   [v0.1.1 release](https://github.com/sumingwang233/dsh-code-review-graph/releases/tag/v0.1.1).
+   Leave it compressed.
+2. Enter its **absolute path** in the native **Add plugin** package-address
+   field, for example `D:\Downloads\dsh-code-review-graph-0.1.1.tgz`, install it
+   and choose **Enable now**.
+3. Confirm that the installed package's `version` is 0.1.1 and create a new
+   session. Do not modify the Desktop profile through an external CLI.
+
+If the installed file already says 0.1.1, refresh the manager's metadata by
+reopening Desktop after saving your work. Use `prepare` for a missing engine;
+reinstalling the JavaScript plugin does not install the Python engine.
 
 ## Permissions and refactors
 
