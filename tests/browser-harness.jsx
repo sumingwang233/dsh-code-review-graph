@@ -1,6 +1,14 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
-import { apply } from '../src/client.tsx';
+window.__ModuleLoader__ = { load({ id, factory }) {
+  if (id !== 'dsh-code-review-graph') throw new Error('Unexpected native client module');
+  window.crgClient = factory(specifier => {
+    if (specifier !== 'react') throw new Error(`Unexpected client external: ${specifier}`);
+    return React;
+  });
+} };
+window.mountGraph = () => {
+const { apply } = window.crgClient;
 let descriptor, body;
 const undo = [];
 const bytes = path => Uint8Array.from(atob(window.assets[path.split('/').at(-1)]), c => c.charCodeAt(0));
@@ -15,8 +23,9 @@ const ctx = {
   remote: { workspaceFiles: reader },
 };
 apply(ctx);
-if (body.options.key !== descriptor.kind) throw new Error('Sidebar body must register under the tab kind');
+if (body.options.key !== descriptor.id) throw new Error('Sidebar body must register under the native tab provider ID');
 window.clientRegistration = { id: descriptor.id, kind: descriptor.kind, key: body.options.key };
 const signal = new AbortController().signal;
 const Graph = body.component;
 createRoot(document.getElementById('root')).render(<Graph sessionId="fixture-session" useTabInfo={() => ({ tab: { signal } })} />);
+};

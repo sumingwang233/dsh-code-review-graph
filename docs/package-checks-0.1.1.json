@@ -1,0 +1,32 @@
+{
+  "package": "dsh-code-review-graph",
+  "version": "0.1.1",
+  "artifact": "dsh-code-review-graph-0.1.1.tgz",
+  "bytes": 63658,
+  "sha256": "b363fc2401e0e8afeb1182433ecbf12384e8e6721c46af191f448c031f0e49bf",
+  "sha512": "t9OryZ3rNoIV3K1HXSt09OtMnPoTZ4xu34YGWXNBzRIdDWr2lIahPPo2OHqk0EiOEjQp1088mZevHAIsdhhKEQ==",
+  "engineCommit": "9eba19ffaa60fda02a459a844067e5c190c9013d",
+  "localPlatform": "win32",
+  "node": "24.14.1",
+  "desktop": {
+    "release": "0.2.0-rc.2",
+    "platform": "win32",
+    "variants": [
+      "clean",
+      "dependency-combination"
+    ],
+    "actualApplication": true,
+    "passed": true
+  },
+  "local": {
+    "unitTests": 5,
+    "readers": [
+      "0.1.5-rc.2",
+      "0.2.0-rc.2"
+    ],
+    "browser": "passed",
+    "webHeadlessLifecycle": "passed",
+    "modelInference": "not run",
+    "reportedPnpmTimeout": "not reproduced"
+  }
+}

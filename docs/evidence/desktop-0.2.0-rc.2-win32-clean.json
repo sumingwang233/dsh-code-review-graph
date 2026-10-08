@@ -1,0 +1,117 @@
+{
+  "release": "0.2.0-rc.2",
+  "plugin": "0.1.1",
+  "platform": "win32",
+  "packageSha256": "b363fc2401e0e8afeb1182433ecbf12384e8e6721c46af191f448c031f0e49bf",
+  "variant": "clean",
+  "execution": "Actual packaged Electron app; native plugin manager; real workspace-file API and CRG renderer; no model inference",
+  "isolation": "Temporary DSH_HOME, userData, HOME/USERPROFILE and APPDATA; only the test Host listener uses port 0",
+  "operations": [
+    {
+      "endpoint": "installBundle",
+      "result": {
+        "stage": "enable",
+        "target": "dsh-code-review-graph",
+        "enabled": false,
+        "changed": true,
+        "application": "applied",
+        "registries": [
+          "https://registry.npmmirror.com/"
+        ],
+        "packageResult": {
+          "exitCode": 0,
+          "output": ".../home/profiles/desktop                | Progress: resolved 0, reused 0, downloaded 1, added 0\n[WARN] Issues with peer dependencies found. Run \"pnpm peers check\" to list them.\n\ndependencies:\n+ dsh-code-review-graph file:D:/Official/Dsh_Plugin_Dev/dsh-code-review-graph/dsh-code-review-graph-0.1.1.tgz\n\n.../home/profiles/desktop                |  +98 ++++++++++\n.../home/profiles/desktop                | Progress: resolved 97, reused 96, downloaded 1, added 87\n.../home/profiles/desktop                | Progress: resolved 97, reused 96, downloaded 1, added 97\n.../home/profiles/desktop                | Progress: resolved 97, reused 96, downloaded 1, added 98, done\nDone in 2.7s using pnpm v11.7.0\n",
+          "truncated": false,
+          "logPath": "<TEST_TMP>\\home\\profiles\\desktop\\.plugin-manager\\logs\\operation-HSmVMH\\pnpm.log"
+        },
+        "bundle": "dsh-code-review-graph"
+      }
+    },
+    {
+      "endpoint": "setBundleEnabled",
+      "result": {
+        "stage": "enable",
+        "target": "dsh-code-review-graph",
+        "enabled": true,
+        "changed": true,
+        "application": "applied",
+        "warnings": []
+      }
+    },
+    {
+      "endpoint": "removeBundle",
+      "result": {
+        "stage": "remove",
+        "target": "dsh-code-review-graph",
+        "changed": true,
+        "application": "applied",
+        "warnings": [],
+        "packageResult": {
+          "exitCode": 0,
+          "output": "✓ Lockfile passes supply-chain policies (verified 20s ago)\n\ndependencies:\n- dsh-code-review-graph file:D:/Official/Dsh_Plugin_Dev/dsh-code-review-graph/dsh-code-review-graph-0.1.1.tgz\n\n.../home/profiles/desktop                |  -98 ----------\nDone in 2.1s using pnpm v11.7.0\n",
+          "truncated": false,
+          "logPath": "<TEST_TMP>\\home\\profiles\\desktop\\.plugin-manager\\logs\\operation-6nbP0Y\\pnpm.log"
+        }
+      }
+    },
+    {
+      "endpoint": "installBundle",
+      "result": {
+        "stage": "enable",
+        "target": "dsh-code-review-graph",
+        "enabled": false,
+        "changed": true,
+        "application": "applied",
+        "registries": [
+          "https://registry.npmmirror.com/"
+        ],
+        "packageResult": {
+          "exitCode": 0,
+          "output": "✓ Lockfile passes supply-chain policies (verified 6s ago)\n.../home/profiles/desktop                | Progress: resolved 0, reused 0, downloaded 1, added 0\n[WARN] Issues with peer dependencies found. Run \"pnpm peers check\" to list them.\n\ndependencies:\n+ dsh-code-review-graph file:D:/Official/Dsh_Plugin_Dev/dsh-code-review-graph/dsh-code-review-graph-0.1.1.tgz\n\n.../home/profiles/desktop                |  +98 ++++++++++\n.../home/profiles/desktop                | Progress: resolved 97, reused 96, downloaded 1, added 89\n.../home/profiles/desktop                | Progress: resolved 97, reused 96, downloaded 1, added 98, done\nDone in 2.6s using pnpm v11.7.0\n",
+          "truncated": false,
+          "logPath": "<TEST_TMP>\\home\\profiles\\desktop\\.plugin-manager\\logs\\operation-nqir7a\\pnpm.log"
+        },
+        "bundle": "dsh-code-review-graph"
+      }
+    },
+    {
+      "endpoint": "setBundleEnabled",
+      "result": {
+        "stage": "enable",
+        "target": "dsh-code-review-graph",
+        "enabled": true,
+        "changed": true,
+        "application": "applied",
+        "warnings": []
+      }
+    },
+    {
+      "endpoint": "removeBundle",
+      "result": {
+        "stage": "remove",
+        "target": "dsh-code-review-graph",
+        "changed": true,
+        "application": "applied",
+        "warnings": [],
+        "packageResult": {
+          "exitCode": 0,
+          "output": "✓ Lockfile passes supply-chain policies (verified 8s ago)\n\ndependencies:\n- dsh-code-review-graph file:D:/Official/Dsh_Plugin_Dev/dsh-code-review-graph/dsh-code-review-graph-0.1.1.tgz\n\n.../home/profiles/desktop                |  -98 ----------\nDone in 2.2s using pnpm v11.7.0\n",
+          "truncated": false,
+          "logPath": "<TEST_TMP>\\home\\profiles\\desktop\\.plugin-manager\\logs\\operation-Wq156v\\pnpm.log"
+        }
+      }
+    }
+  ],
+  "pageErrors": [],
+  "download": {
+    "filename": "code-review-graph.html",
+    "state": "completed"
+  },
+  "graph": {
+    "nativeSidebar": true,
+    "actualWorkspaceReader": true,
+    "search": true,
+    "export": true
+  },
+  "passed": true
+}

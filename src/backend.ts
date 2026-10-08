@@ -18,7 +18,7 @@ export async function connect(engine: Engine, cwd: string): Promise<Client> {
   await checkedData(cwd);
   const transport = new StdioClientTransport({ command: engine.command, args: [...engine.args, 'serve', '--repo', cwd], cwd, env: environment(engine), stderr: 'pipe' });
   transport.stderr?.on('data', () => {});
-  const client = new Client({ name: 'dsh-code-review-graph', version: '0.1.0' });
+  const client = new Client({ name: 'dsh-code-review-graph', version: '0.1.1' });
   try { await client.connect(transport); return client; }
   catch (error) { await transport.close(); throw new Error(`CRG engine unavailable. Run dsh-crg prepare explicitly. ${String(error)}`); }
 }

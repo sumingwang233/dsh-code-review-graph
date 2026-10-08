@@ -6,7 +6,8 @@ import { join, resolve } from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { cli, version } from './runtime.mjs';
 import { scrubEnv } from '../dist/safety.js';
-const tarball = resolve('dsh-code-review-graph-0.1.0.tgz');
+const release = JSON.parse(await readFile('package.json', 'utf8')).version;
+const tarball = resolve(`dsh-code-review-graph-${release}.tgz`);
 
 test(`DSH ${version}: real Web/headless bundle lifecycle and Desktop ownership`, { timeout: 240000 }, async () => {
   await access(tarball);

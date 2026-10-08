@@ -4,16 +4,21 @@ Local checkpoint: **2026-10-08**, Windows, Node **24.14.1**, Python **3.11.16**.
 CRG base **2.3.9**; exact contribution engine commit is in `engine.json`.
 DSH packages are the real published releases **0.1.5-rc.2** and **0.2.0-rc.2**.
 
-Windows 本地验证及 Windows/Linux/macOS 的远程 CI 均已通过。桌面版已检查
-原生插件 ownership 规则及共享 Client 图谱组件，**尚未启动 Electron 应用进行整机实测**。
-这些范围不同，不能把组件测试描述为桌面整机验收。未运行真实模型推理。
+0.1.1 修复了真实原生加载器才会暴露的两个问题：Client 发行文件必须使用
+`window.__ModuleLoader__.load({ id, factory })`，侧栏正文必须按 provider ID 注册。
+0.1.0 的浏览器测试重新打包了源文件，并错误地接受了按 kind 注册正文，未发现这两个问题。
+回归测试现在直接执行发行 Client 文件，并检查 provider ID。
+
+Windows 本地增加实际安装的 DSH Desktop **0.2.0-rc.2** 验证；三平台、两版 DSH
+的 CI 覆盖原生运行时、CLI 和浏览器组件。Desktop 0.1.5-rc.2、Linux/macOS
+桌面应用尚未整机实测。未运行真实模型推理。
 
 ## Results
 
 | Check | Local result | Scope |
 | --- | --- | --- |
-| TypeScript and Host/Client build | Passed | Prebuilt ESM Host, CLI, browser Client |
-| Plugin safety contracts | 4 passed | Root/linked-directory fences, all 30 tools, both readers, offline iframe, full refactor recovery |
+| TypeScript and Host/Client build | Passed | ESM Host/CLI; native closure-factory browser Client |
+| Plugin safety and native Client contracts | 5 passed | Root/linked-directory fences, all 30 tools, both readers, offline iframe, full refactor recovery; actual published Client executes as a classic script |
 | Real engine worker lifecycle | 3 passed | Shared root worker, last owner cleanup, resumed owner, cancellation, timeout, missing engine |
 | DSH 0.1.5-rc.2 session | Passed | 52 recorded deterministic tool calls, including 9 expected refusals |
 | DSH 0.2.0-rc.2 session | Passed | Same native session and real engine checks |
@@ -24,7 +29,8 @@ Windows 本地验证及 Windows/Linux/macOS 的远程 CI 均已通过。桌面�
 | Ruff for changed Python sources/tests | Passed | All modified Python files |
 | Windows/Linux/macOS × both DSH releases | 6 CI jobs passed | Real pinned engine, isolated native installation, session calls, browser graph and explicit setup |
 | Core Windows/Linux/macOS regression matrix | 3 CI jobs passed | 808 passed, 1 platform-specific skip on each OS |
-| Electron application launch | Not run | Native shared Client contribution and ownership are covered separately |
+| Windows Desktop 0.2.0-rc.2 | Passed | Actual packaged Electron application, native install/enable/remove/reinstall, graph reading/search/HTML download, unrelated configuration retained; no model |
+| Other Desktop releases/platforms | Not run | Browser/CLI checks do not establish complete Electron coverage |
 | Real model inference | Not run | Deterministic automation only, no paid inference jobs |
 
 The four local core skips comprise three existing symlink checks requiring
@@ -62,10 +68,41 @@ the transcript retains the structured value and omits duplicate rendering;
 error content is kept. Upstream reviewers decide whether deterministic evidence
 satisfies their contribution requirement.
 
-The Playwright harness imports the **actual native client contribution** and
-mounts its graph in Chromium, using a fixture for each release's workspace asset
-reader. It checks native sidebar identity/slot registration. This verifies the
-shared Web/Desktop component, not an entire DSH Web server or Electron process.
+The Playwright browser harness executes **`dist/client.js` as published**, through
+the native classic-script factory contract, and mounts its graph in Chromium.
+Only the host services and each release's workspace reader are fixtures. It
+checks provider ID/slot registration. This remains a component test, separate
+from the real Desktop test.
+
+## Desktop regression and reported timeout
+
+- [Clean Desktop profile evidence](evidence/desktop-0.2.0-rc.2-win32-clean.json)
+- [Existing dependency combination evidence](evidence/desktop-0.2.0-rc.2-win32-dependency-combination.json)
+
+`tests/desktop.mjs` launches the actual installed Electron executable with a
+temporary DSH_HOME, userData, HOME/USERPROFILE and APPDATA. It uses the native
+plugin manager to install the packed tarball, enable it, uninstall it, reinstall
+it and uninstall it again. It checks that existing dependencies, bundles and an
+unrelated user setting survive. The real engine CLI builds a small Python graph;
+the Desktop sidebar reads it through the actual workspace-file service, searches
+it and exports the HTML through Electron's download pipeline. Session creation
+is deterministic, without model inference. This complements the real DSH tool
+session transcripts; it does not claim that the model drove the Desktop UI.
+
+The official Desktop Host hardcodes port 19387. A test-only preload changes that
+test process's listener to an OS-assigned port so the user's running Desktop is
+untouched. Test windows stay hidden; the native welcome flow uses “Set up later”
+without signing in, copying credentials or configuring a model key. No test
+settings are written to the user's profile.
+
+The reported pnpm log said `Done in 4.1s`, followed by the Host's 600000 ms
+no-output timeout. The same 0.1.0 package completed successfully with bundled
+Electron/pnpm, a clean native Desktop profile, and a native Desktop profile
+containing the three existing plugins and package-manager policy files. The
+latter reproduced the same `+98 -27` dependency change. The original hang has
+**not been reproduced**. 0.1.1 fixes the two independently confirmed Client
+defects and the missing regression coverage; it does not claim to fix that
+unresolved package-manager timeout.
 
 ## Reproduction
 
@@ -90,6 +127,17 @@ installation use the publicly available exact source in `engine.json`.
 Test profiles use temporary
 `DSH_HOME` values and never modify the user's DSH profiles or credentials.
 
+For the separate real Desktop check, first run `npm pack`, set
+`DSH_DESKTOP_EXECUTABLE` to a supported installed Desktop application and
+`CRG_COMMAND` to a prepared real engine, then run `npm run test:desktop`.
+`DSH_VERSION` must match the actual application version (default 0.2.0-rc.2).
+Missing application/engine inputs fail explicitly. To reproduce a dependency
+combination, additionally set `DSH_DESKTOP_PROFILE_FIXTURE` to a profile directory
+and `DSH_DESKTOP_PNPM` to the application's bundled pnpm entry. Only
+`package.json`, `pnpm-lock.yaml` and `pnpm-workspace.yaml` are copied to the
+temporary profile. Evidence is written to `test-results/desktop-*.json` with the
+tested package SHA-256 and native operation results.
+
 Core regression command:
 
 ```sh
@@ -101,7 +149,7 @@ Linux and macOS using a real pinned engine, isolated profile lifecycle, browser
 checks and dependency preparation. The core's `dsh-platform.yml` runs the Python
 contract/regression set on the same three OS families.
 
-- [Adapter CI: all six combinations passed](https://github.com/sumingwang233/dsh-code-review-graph/actions/runs/37716247823), source `9c478191b743ecc443cc0eede5d67927a367d7ed`.
+- [Historical 0.1.0 adapter CI: six combinations passed](https://github.com/sumingwang233/dsh-code-review-graph/actions/runs/37716247823), source `9c478191b743ecc443cc0eede5d67927a367d7ed`; the old browser harness missed the Client packaging/slot defects described above.
 - [Core CI: all three OS jobs passed](https://github.com/sumingwang233/code-review-graph/actions/runs/37717599685), source `8ac789138463cd3b8282688bb94d682e90ca1df3`.
 
 Each adapter CI artifact contains its native session transcript, browser report,

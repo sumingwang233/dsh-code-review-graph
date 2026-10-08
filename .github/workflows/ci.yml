@@ -64,4 +64,4 @@ jobs:
           name: evidence-${{ matrix.os }}-${{ matrix.dsh }}
           path: |
             test-results/
-            dsh-code-review-graph-0.1.0.tgz
+            dsh-code-review-graph-*.tgz

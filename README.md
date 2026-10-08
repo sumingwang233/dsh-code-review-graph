@@ -4,22 +4,25 @@
 
 面向 DeepSeek Harness 的原生代码图谱插件。复用 [Code Review Graph](https://github.com/tirth8205/code-review-graph)
 2.3.9 引擎，提供全部 30 个工具、5 个工作流 prompt、7 个技能，以及 Web／桌面侧栏交互图谱。
-首版目标为 **0.1.0**；发布状态以 GitHub 和 npm 的实际公开版本为准。
+当前补丁版本为 **0.1.1**，修复 Web／桌面原生客户端加载和侧栏显示，补充真实桌面应用验证。
+详见 [0.1.1 更新说明](docs/release-0.1.1.md)。
 
 支持 Windows、Linux、macOS；兼容基线固定为 DSH **0.1.5-rc.2、0.2.0-rc.2**。
 Web 和命令行通过官方 CLI 安装，桌面版通过对应版本的原生插件管理器安装。Alpha 版本不在兼容承诺内。
 
 ## 安装
 
-公开发布后：
+安装已发布的 npm 包：
 
 ```sh
-dsh plugin --profile web add dsh-code-review-graph@0.1.0
-npx dsh-code-review-graph@0.1.0 prepare
+dsh plugin --profile web add dsh-code-review-graph@0.1.1
+npx dsh-code-review-graph@0.1.1 prepare
 ```
 
 命令行入口将 `web` 替换为 `headless` 或你使用的普通 profile。
-桌面版在插件管理器中安装 `dsh-code-review-graph@0.1.0`；桌面 profile 由应用持有，外部 CLI 不直接修改。
+桌面版在插件管理器中安装 `dsh-code-review-graph@0.1.1`，安装完成后点击“立即启用”。
+已有 0.1.0 的用户先通过该管理器卸载旧版，再安装新版；尚未确认的安装先点击“核对安装状态”。
+桌面 profile 由应用持有，外部 CLI 不直接修改。
 参考 [DSH 官方打包指南](https://github.com/deepseek-ai/deepseek-harness/blob/dsh-v0.2.0-rc.2/docs/user/develop/basic/publish.md)。
 
 `prepare` 是主动触发的一次性依赖准备：优先复用 uv 或真实 Python 3.10+，在
@@ -35,7 +38,7 @@ npm ci
 npm run typecheck
 npm run build
 npm pack
-dsh plugin --profile web add ./dsh-code-review-graph-0.1.0.tgz
+dsh plugin --profile web add ./dsh-code-review-graph-0.1.1.tgz
 node dist/setup.js prepare ../code-review-graph
 ```
 

@@ -13,6 +13,7 @@ test(`Web/Desktop client graph, ${version} asset reader`, { timeout: 120000 }, a
   const path = entry.result.value?.path ?? JSON.parse(entry.result.content[0].text).path;
   const directory = dirname(path), root = dirname(directory);
   const bundle = await build({ entryPoints: ['tests/browser-harness.jsx'], bundle: true, format: 'iife', platform: 'browser', write: false });
+  const client = await readFile('dist/client.js', 'utf8');
   const browser = await chromium.launch(process.env.PLAYWRIGHT_CHANNEL ? { channel: process.env.PLAYWRIGHT_CHANNEL } : {});
   const page = await browser.newPage({ viewport: { width: 1400, height: 900 }, acceptDownloads: true });
   const escaped = [];
@@ -26,12 +27,14 @@ test(`Web/Desktop client graph, ${version} asset reader`, { timeout: 120000 }, a
       await page.setContent('<div id="root" style="height:100vh"></div>');
       await page.evaluate(({ assets, old }) => { window.assets = assets; window.readerVersion = old ? 'old' : 'new'; }, { assets, old: version === '0.1.5-rc.2' });
       await page.addScriptTag({ content: bundle.outputFiles[0].text });
+      await page.addScriptTag({ content: client });
+      await page.evaluate(() => window.mountGraph());
       const frame = page.frameLocator('iframe');
       await frame.locator('#stats-bar').waitFor();
       const svg = frame.locator('#graph-svg'); await svg.waitFor();
       await frame.locator('#graph-svg circle, #graph-svg .node-shape').first().waitFor();
       assert.equal(await page.locator('iframe').getAttribute('sandbox'), 'allow-scripts allow-downloads');
-      assert.deepEqual(await page.evaluate(() => window.clientRegistration), { id: 'dsh-code-review-graph', kind: 'code-review-graph', key: 'code-review-graph' });
+      assert.deepEqual(await page.evaluate(() => window.clientRegistration), { id: 'dsh-code-review-graph', kind: 'code-review-graph', key: 'dsh-code-review-graph' });
       const search = mode === 'full' ? 'added' : mode === 'file' ? 'demo' : 'repo';
       await frame.locator('#search').fill(search);
       await frame.locator('.sr-item').first().waitFor();

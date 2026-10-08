@@ -4,24 +4,27 @@
 
 Native DeepSeek Harness tools and a Web/Desktop graph sidebar, powered by
 [Code Review Graph](https://github.com/tirth8205/code-review-graph) **2.3.9**.
-Preserves all 30 tools, five prompt workflows and seven skills. The first release
-target is **0.1.0**; check GitHub/npm for the actual published release status.
+Preserves all 30 tools, five prompt workflows and seven skills. Patch **0.1.1**
+fixes native Web/Desktop client loading and sidebar display, with actual Desktop application validation.
+See the [0.1.1 release notes](docs/release-0.1.1.md).
 
 Supports Windows, Linux and macOS, with exact DSH baselines **0.1.5-rc.2** and
 **0.2.0-rc.2**. Alpha compatibility is outside the contract.
 
 ## Installation
 
-After public release:
+Install the published npm package:
 
 ```sh
-dsh plugin --profile web add dsh-code-review-graph@0.1.0
-npx dsh-code-review-graph@0.1.0 prepare
+dsh plugin --profile web add dsh-code-review-graph@0.1.1
+npx dsh-code-review-graph@0.1.1 prepare
 ```
 
 Use `headless` or another ordinary profile for the command-line entrance. Desktop
 profiles belong to the application: install through that release's native plugin
-manager. See the [official DSH publishing guide](https://github.com/deepseek-ai/deepseek-harness/blob/dsh-v0.2.0-rc.2/docs/user/develop/basic/publish.md).
+manager, using `dsh-code-review-graph@0.1.1`, then click **Enable now**. Uninstall
+0.1.0 through the manager before upgrading. For an unconfirmed installation,
+first use **Check installation status**. See the [official DSH publishing guide](https://github.com/deepseek-ai/deepseek-harness/blob/dsh-v0.2.0-rc.2/docs/user/develop/basic/publish.md).
 
 `prepare` explicitly creates an isolated Python engine under
 `$DSH_HOME/code-review-graph/engine` (default `~/.dsh/code-review-graph/engine`),
@@ -39,7 +42,7 @@ npm ci
 npm run typecheck
 npm run build
 npm pack
-dsh plugin --profile web add ./dsh-code-review-graph-0.1.0.tgz
+dsh plugin --profile web add ./dsh-code-review-graph-0.1.1.tgz
 node dist/setup.js prepare ../code-review-graph
 ```
 

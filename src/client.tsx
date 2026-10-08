@@ -56,5 +56,5 @@ export function apply(ctx: Context): void {
       {html && <iframe title="Interactive code graph / 交互代码图谱" sandbox="allow-scripts allow-downloads" srcDoc={html} style={{ width: '100%', flex: 1, border: 0 }} />}
     </section>;
   }
-  ctx.effect(() => ctx.slots.inject('sidebar.right.pane.tab', () => ctx.slots.register({ name: 'sidebar.right.pane.tab', key: 'code-review-graph' }, Graph)));
+  ctx.effect(() => ctx.slots.inject('sidebar.right.pane.tab', () => ctx.slots.register({ name: 'sidebar.right.pane.tab', key: id }, Graph)));
 }

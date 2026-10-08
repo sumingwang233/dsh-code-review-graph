@@ -7,7 +7,8 @@ import { checkedPath, checkedData, sha256, scrubEnv } from '../dist/safety.js';
 import { commitPlan } from '../dist/refactor.js';
 import { exposed, publicName } from '../dist/workflows.js';
 import { inlineGraph } from '../dist/html.js';
-import { readAsset } from '../dist/client.js';
+import { loadClient } from './client-runtime.mjs';
+const { readAsset } = loadClient();
 
 test('repository fence includes missing paths, symlinks and graph artifacts', async () => {
   const temp = await realpath(await mkdtemp(join(tmpdir(), 'dsh-crg-fence-')));
