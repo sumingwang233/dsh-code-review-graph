@@ -1,5 +1,27 @@
 # Validation / 验证记录
 
+## 1.0.3 发行验证
+
+1.0.3 是版本号更新发布：包版本由 0.1.2 更新为 1.0.3，代码与已验证的 0.1.2
+一致，无行为变更。本次在 Windows（Node 24、Python 3.11）重新执行：
+
+- TypeScript 类型检查与 Host/Client 构建通过（prepack）。
+- 单元测试 5 项、setup 2 项通过；backend 3 项在真实 `prepare` 的隔离引擎上通过。
+- 真实 DSH 0.1.5-rc.2、0.2.0-rc.2 会话集成各 1 项通过（真实 Session/AgentRegistry/ToolRuntime
+  与真实 CRG 引擎，无模型推理）；隔离测试引擎额外安装 matplotlib，以满足 SVG 导出路径。
+- 发行 tarball 的真实 Web/headless 安装生命周期与 Desktop 所有权拒绝通过。
+- 浏览器组件与真实 Desktop 整机测试本次未重跑；其客户端代码与 0.1.2 相同，
+  沿用 0.1.2 的记录。发行包字节与 SHA-256 见 `docs/package-checks-1.0.3.json`。
+
+1.0.3 is a release-number update: the package moves from 0.1.2 to 1.0.3 with
+identical code and no behaviour change. On Windows (Node 24, Python 3.11) this
+release re-ran the TypeScript build, 5 unit tests, 2 setup tests, 3 backend
+tests against a real prepared engine, both real DSH session integrations, and
+the real Web/headless install lifecycle. Browser-component and Electron Desktop
+runs were not repeated; their client code is unchanged from 0.1.2, whose records
+remain applicable. Package bytes and SHA-256 are recorded in
+`docs/package-checks-1.0.3.json`.
+
 ## 0.1.2 发行验证
 
 0.1.2 的验证记录作为 [v0.1.2 发行页](https://github.com/sumingwang233/dsh-code-review-graph/releases/tag/v0.1.2)

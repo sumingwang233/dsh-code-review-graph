@@ -4,9 +4,10 @@
 
 Native DeepSeek Harness tools and a Web/Desktop graph sidebar, powered by
 [Code Review Graph](https://github.com/tirth8205/code-review-graph) **2.3.9**.
-Preserves all 30 tools, five prompt workflows and seven skills. Version **0.1.2**
-adds one-click engine setup and graph generation, plus native commands without model inference.
-See the [0.1.2 release notes](docs/release-0.1.2.md).
+Preserves all 30 tools, five prompt workflows and seven skills. Version **1.0.3**
+updates the release number over the verified 0.1.2 bundle, retaining one-click
+engine setup, graph generation and native commands without model inference.
+See the [1.0.3 release notes](docs/release-1.0.3.md).
 
 Supports Windows, Linux and macOS, with exact DSH baselines **0.1.5-rc.2** and
 **0.2.0-rc.2**. Alpha compatibility is outside the contract.
@@ -16,14 +17,14 @@ Supports Windows, Linux and macOS, with exact DSH baselines **0.1.5-rc.2** and
 Install the published npm package:
 
 ```sh
-dsh plugin --profile web add dsh-code-review-graph@0.1.2
-npx dsh-code-review-graph@0.1.2 prepare
+dsh plugin --profile web add dsh-code-review-graph@1.0.3
+npx dsh-code-review-graph@1.0.3 prepare
 ```
 
 Use `headless` or another ordinary profile for the command-line entrance. Desktop
 profiles belong to the application: install through that release's native plugin
-manager, using `dsh-code-review-graph@0.1.2`, then click **Enable now**. Uninstall
-0.1.0 through the manager before upgrading. For an unconfirmed installation,
+manager, using `dsh-code-review-graph@1.0.3`, then click **Enable now**. Uninstall
+0.1.x through the manager before upgrading. For an unconfirmed installation,
 first use **Check installation status**. See the [official DSH publishing guide](https://github.com/deepseek-ai/deepseek-harness/blob/dsh-v0.2.0-rc.2/docs/user/develop/basic/publish.md).
 
 `prepare` explicitly creates an isolated Python engine under
@@ -42,7 +43,7 @@ npm ci
 npm run typecheck
 npm run build
 npm pack
-dsh plugin --profile web add ./dsh-code-review-graph-0.1.2.tgz
+dsh plugin --profile web add ./dsh-code-review-graph-1.0.3.tgz
 node dist/setup.js prepare ../code-review-graph
 ```
 
@@ -187,25 +188,25 @@ default Desktop profile's installed manifest is:
 ```
 
 Its `version` is the installed version. The profile's own `package.json` records
-a range such as `^0.1.0`: that range permits 0.1.2 but does not prove an upgrade.
-Installation logs should also name 0.1.2 explicitly.
+a range such as `^1.0.0`: that range permits 1.0.3 but does not prove an upgrade.
+Installation logs should also name 1.0.3 explicitly.
 
 Official npm and npmmirror can have different `latest` versions. An unversioned
-package name may still resolve to 0.1.0 on a stale mirror. An `npm install` in an
+package name may still resolve to an older release on a stale mirror. An `npm install` in an
 ordinary directory also does not update the application-owned Desktop profile.
 Remove the old version through the native manager, then install the exact spec
-`dsh-code-review-graph@0.1.2`. If your source lacks that version:
+`dsh-code-review-graph@1.0.3`. If your source lacks that version:
 
-1. Download `dsh-code-review-graph-0.1.2.tgz` from the
-   [v0.1.2 release](https://github.com/sumingwang233/dsh-code-review-graph/releases/tag/v0.1.2).
+1. Download `dsh-code-review-graph-1.0.3.tgz` from the
+   [v1.0.3 release](https://github.com/sumingwang233/dsh-code-review-graph/releases/tag/v1.0.3).
    Leave it compressed.
 2. Enter its **absolute path** in the native **Add plugin** package-address
-   field, for example `D:\Downloads\dsh-code-review-graph-0.1.2.tgz`, install it
+   field, for example `D:\Downloads\dsh-code-review-graph-1.0.3.tgz`, install it
    and choose **Enable now**.
-3. Confirm that the installed package's `version` is 0.1.2 and create a new
+3. Confirm that the installed package's `version` is 1.0.3 and create a new
    session. Do not modify the Desktop profile through an external CLI.
 
-If the installed file already says 0.1.2, refresh the manager's metadata by
+If the installed file already says 1.0.3, refresh the manager's metadata by
 reopening Desktop after saving your work. Use `prepare` for a missing engine;
 reinstalling the JavaScript plugin does not install the Python engine.
 
