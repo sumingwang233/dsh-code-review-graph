@@ -1,0 +1,34 @@
+{
+  "package": "dsh-code-review-graph",
+  "version": "1.0.3",
+  "artifact": "dsh-code-review-graph-1.0.3.tgz",
+  "bytes": 79655,
+  "sha256": "c3dbc140883454815cafc4a358d8bb67cdfbf69702d55c1ec43a580c66909222",
+  "integrity": "sha512-5uo+ZiyMWcHUBAQz4jB102sVsvMOKJmJseDVIBhSg5sgNOmUJqDWRaH4WQ0iZEcR9hVmcokRXrxyQngpoXEf8Q==",
+  "sourceCommit": "1fcbf208a2874a6b9556f03b838e9a24d02639b4",
+  "engineCommit": "9eba19ffaa60fda02a459a844067e5c190c9013d",
+  "localPlatform": "win32",
+  "node": "24.14.1",
+  "local": {
+    "typecheckBuild": "passed",
+    "unitTests": 5,
+    "backendTests": 3,
+    "setupTests": 2,
+    "dshReleases": ["0.1.5-rc.2", "0.2.0-rc.2"],
+    "sessionIntegrationRealEngine": "passed on both releases",
+    "webHeadlessLifecycle": "passed",
+    "testEngineNote": "matplotlib installed into the isolated prepared engine for the SVG export path",
+    "browserComponentAndDesktop": "not re-run; client code unchanged from 0.1.2",
+    "modelInference": "not run"
+  },
+  "ci": {
+    "status": "pending push to GitHub"
+  },
+  "githubRelease": {
+    "status": "not created"
+  },
+  "npm": {
+    "status": "not published",
+    "registry": "https://registry.npmjs.org"
+  }
+}
