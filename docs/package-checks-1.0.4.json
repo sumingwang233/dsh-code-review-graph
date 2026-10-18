@@ -5,8 +5,8 @@
   "bytes": 81791,
   "sha256": "fb85a0bc1f2f89d5c8aa155d50f9c71069e411cad53cc7666b191203f4b5f865",
   "integrity": "sha512-cYmp7OMg2DB7LERGtuIPkio+HxTWhpIgQM8C2PKpdrzYsIB/JtT/veEnLVvxhMRJyrz5U4CZ7OlnjBQVdusWQA==",
-  "sourceCommit": "1294f79b4338da9c74b77c2680adaa852f5e77f7",
-  "sourceState": "packed from a dirty worktree: HEAD plus the 1.0.4 fix (src/index.ts, tests/schema.test.mjs, docs/release-1.0.4.md, version bump) not yet committed",
+  "sourceCommit": "6325394221e39997943e4234626c7b46b2488525",
+  "sourceState": "packed from a dirty worktree; the packed content is commit 6325394 \"Release 1.0.4\"",
   "engineCommit": "9eba19ffaa60fda02a459a844067e5c190c9013d",
   "localPlatform": "win32",
   "node": "24.14.1",
@@ -24,13 +24,24 @@
     "modelInference": "not run"
   },
   "ci": {
-    "status": "pending push to GitHub"
+    "status": "passed",
+    "workflow": "Native DSH compatibility",
+    "run": 39136270634,
+    "url": "https://github.com/sumingwang233/dsh-code-review-graph/actions/runs/39136270634"
   },
   "githubRelease": {
-    "status": "not created"
+    "status": "created",
+    "tag": "v1.0.4",
+    "url": "https://github.com/sumingwang233/dsh-code-review-graph/releases/tag/v1.0.4"
   },
   "npm": {
-    "status": "not published",
-    "registry": "https://registry.npmjs.org"
+    "status": "published",
+    "registry": "https://registry.npmjs.org",
+    "distTag": "latest",
+    "shasum": "df8f00e601aec7032c79280be13711cc26cc3e17",
+    "integrity": "sha512-cYmp7OMg2DB7LERGtuIPkio+HxTWhpIgQM8C2PKpdrzYsIB/JtT/veEnLVvxhMRJyrz5U4CZ7OlnjBQVdusWQA==",
+    "publishedAt": "2026-10-18T14:27:10.196Z",
+    "note": "PUT returned 202 Accepted; the registry published the version ~9 minutes later after async processing",
+    "verified": "downloaded tarball is byte-identical to the local artifact (sha1 df8f00e601aec7032c79280be13711cc26cc3e17)"
   }
 }
