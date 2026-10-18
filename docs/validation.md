@@ -1,5 +1,34 @@
 # Validation / 验证记录
 
+## 1.0.4 发行验证
+
+1.0.4 修复 1.0.3 的工具 schema 缺陷：`capabilities.json` 未声明 `required` 的工具在
+注册时产生自有键 `required: undefined`，reject 后被 DSH 会话日志的无损 JSON 校验
+拒绝，导致 `crg_workflow` / `crg_prompt` 揭示工具的那一轮以
+`request/header` 序列化失败结束。本次在 Windows（Node 24）执行：
+
+- 类型检查与 Host/Client 构建通过（prepack）。
+- `npm test` 10 项全通过（新增 `tests/schema.test.mjs` 4 项 + 1 项与真实
+  `@deepseek-ai/dsh-util-values` `snapshotJsonValue` 的交叉验证）。
+- 红→绿对照：在 1.0.3 的构建产物上第 4 项失败，`context` workflow 揭示的
+  `build_or_update_graph_tool`、`get_minimal_context_tool`、`list_graph_stats_tool`
+  报 `$.required`；`npm run build` 后全部通过。
+- 真实校验器直接验证：`{ required: undefined }` 被拒，删除该键或 `required: []` 均通过。
+- 真实 DSH 会话集成、Web/headless 安装生命周期、浏览器组件与 Desktop 整机测试
+  本次未重跑；除该 schema 修复外构建产物与 1.0.3 相同。
+  发行包字节与 SHA-256 见 `docs/package-checks-1.0.4.json`。
+
+1.0.4 fixes the 1.0.3 tool-schema defect: a tool whose `capabilities.json` entry omits
+`required` registered an own `required: undefined` key, which DSH's lossless-JSON
+session log rejects, failing the `crg_workflow` / `crg_prompt` turn at the
+`request/header` append. On Windows (Node 24) this release ran typecheck + build,
+`npm test` (10/10, including the new `tests/schema.test.mjs` and a cross-check
+against the real `snapshotJsonValue`), and recorded the red→green comparison — on
+the 1.0.3 bundle the third case fails on the three `context`-revealed tools with
+path `$.required`. Real DSH session integration, install lifecycle, browser and
+Desktop runs were not repeated; apart from this schema fix the build output matches
+1.0.3. Package bytes and SHA-256 are recorded in `docs/package-checks-1.0.4.json`.
+
 ## 1.0.3 发行验证
 
 1.0.3 是版本号更新发布：包版本由 0.1.2 更新为 1.0.3，代码与已验证的 0.1.2

@@ -1,0 +1,36 @@
+{
+  "package": "dsh-code-review-graph",
+  "version": "1.0.4",
+  "artifact": "dsh-code-review-graph-1.0.4.tgz",
+  "bytes": 81791,
+  "sha256": "fb85a0bc1f2f89d5c8aa155d50f9c71069e411cad53cc7666b191203f4b5f865",
+  "integrity": "sha512-cYmp7OMg2DB7LERGtuIPkio+HxTWhpIgQM8C2PKpdrzYsIB/JtT/veEnLVvxhMRJyrz5U4CZ7OlnjBQVdusWQA==",
+  "sourceCommit": "1294f79b4338da9c74b77c2680adaa852f5e77f7",
+  "sourceState": "packed from a dirty worktree: HEAD plus the 1.0.4 fix (src/index.ts, tests/schema.test.mjs, docs/release-1.0.4.md, version bump) not yet committed",
+  "engineCommit": "9eba19ffaa60fda02a459a844067e5c190c9013d",
+  "localPlatform": "win32",
+  "node": "24.14.1",
+  "local": {
+    "typecheckBuild": "passed (prepack: npm run typecheck && npm run build)",
+    "unitTests": 10,
+    "dshReleases": [
+      "0.2.0-rc.2"
+    ],
+    "sessionIntegrationRealEngine": "not re-run; build output identical to 1.0.3 apart from the schema fix",
+    "webHeadlessLifecycle": "not re-run",
+    "browserComponentAndDesktop": "not re-run",
+    "schemaRedGreen": "1.0.3 dist rejected 3 of the 6 context-revealed schemas at $.required; 1.0.4 dist rejects 0 of 33 schemas",
+    "realValidatorCrossCheck": "snapshotJsonValue(@deepseek-ai/dsh-util-values): {required: undefined} rejected, key deleted accepted, required: [] accepted",
+    "modelInference": "not run"
+  },
+  "ci": {
+    "status": "pending push to GitHub"
+  },
+  "githubRelease": {
+    "status": "not created"
+  },
+  "npm": {
+    "status": "not published",
+    "registry": "https://registry.npmjs.org"
+  }
+}

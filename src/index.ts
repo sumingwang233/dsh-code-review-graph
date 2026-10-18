@@ -109,7 +109,11 @@ export async function apply(ctx: Context, config: Configuration): Promise<void> 
   for (const tool of tools) {
     const parameters = structuredClone(tool.inputSchema);
     delete parameters.properties?.repo_root;
-    parameters.required = parameters.required?.filter(n => n !== 'repo_root');
+    // capabilities.json omits `required` for most tools, so a plain optional chain
+    // would assign `undefined` as an own key and break DSH's lossless-JSON session
+    // log ("session event \"request/header\" carries non-JSON-serializable data").
+    if (Array.isArray(parameters.required)) parameters.required = parameters.required.filter(n => n !== 'repo_root');
+    else delete parameters.required;
     parameters.additionalProperties = false;
     const validate = ajv.compile(parameters);
     const definition = {
