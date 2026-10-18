@@ -22,10 +22,11 @@ export const Config = z.object({
   engineArgs: z.array(z.string()).default([]),
   timeoutMs: z.number().min(1000).default(120000),
   authorizedRepos: z.array(z.string()).default([]),
+  repositoryRoot: z.string().default(''),
   embeddingProviders: z.array(z.string()).default(['local']),
   embeddingEnv: z.array(z.string()).default([]),
 });
-export interface Configuration { engineCommand: string; engineArgs: string[]; timeoutMs: number; authorizedRepos: string[]; embeddingProviders: string[]; embeddingEnv: string[] }
+export interface Configuration { engineCommand: string; engineArgs: string[]; timeoutMs: number; authorizedRepos: string[]; repositoryRoot: string; embeddingProviders: string[]; embeddingEnv: string[] }
 interface Capability { name: string; description?: string; inputSchema: Record<string, unknown> & { properties?: Record<string, unknown>; required?: string[] } }
 export const output: ToolDefinition['output'] = {
   schema: { type: 'object', additionalProperties: true },
@@ -52,7 +53,7 @@ export async function apply(ctx: Context, config: Configuration): Promise<void> 
 
   async function rootFor(exec: ToolRunContext) {
     if (!exec.agent) throw new Error('Graph tools require a session-owned agent');
-    return repository(exec.agent.session.header.cwd);
+    return repository(exec.agent.session.header.cwd, config.repositoryRoot);
   }
 
   async function invoke(raw: string, args: Record<string, unknown>, exec: ToolRunContext) {
@@ -71,11 +72,11 @@ export async function apply(ctx: Context, config: Configuration): Promise<void> 
       if (Array.isArray(args[key])) for (const path of args[key] as string[]) await checkedPath(root, path, true);
     }
     if (raw === 'list_repos_tool') {
-      const roots = [...new Set([root, ...await Promise.all(config.authorizedRepos.map(repository))])];
+      const roots = [...new Set([root, ...await Promise.all(config.authorizedRepos.map(path => repository(path)))])];
       return { status: 'ok', repos: roots.map(path => ({ alias: roots.filter(r => basename(r) === basename(path)).length > 1 ? `${basename(path)}@${sha256(path).slice(0, 8)}` : basename(path), path })) };
     }
     if (raw === 'cross_repo_search_tool') {
-      const roots = [...new Set([root, ...await Promise.all(config.authorizedRepos.map(repository))])];
+      const roots = [...new Set([root, ...await Promise.all(config.authorizedRepos.map(path => repository(path)))])];
       const aliases = roots.map(path => ({ path, alias: roots.filter(r => basename(r) === basename(path)).length > 1 ? `${basename(path)}@${sha256(path).slice(0, 8)}` : basename(path) }));
       const selected = Array.isArray(args.repos) ? args.repos as string[] : [];
       if (selected.some(n => !aliases.some(r => r.alias === n))) throw new Error('Repository is not authorized');
@@ -144,7 +145,7 @@ export async function apply(ctx: Context, config: Configuration): Promise<void> 
   }, additionalProperties: false };
   const validateVisualization = ajv.compile(visualizationSchema);
   async function visualize(args: Record<string, unknown>, agent: NonNullable<ToolRunContext['agent']>, signal: AbortSignal) {
-    const root = await repository(agent.session.header.cwd);
+    const root = await repository(agent.session.header.cwd, config.repositoryRoot);
     signal = AbortSignal.any([signal, life.signal]);
     const graphUpdate = await pool.ensure(root, agent.id, signal);
     for (const path of (args.seed_file ?? []) as string[]) await checkedPath(root, path, true);
@@ -179,7 +180,7 @@ export async function apply(ctx: Context, config: Configuration): Promise<void> 
     } }));
     scope.effect(() => commands.register({ name: 'crg-graph', description: '生成／更新交互代码图谱，无需模型 / Generate or update the interactive code graph without a model', handler: async ({ agent, signal, rawInput }) => {
       if (rawInput.trim()) throw new Error('/crg-graph does not need parameters / 无需填写参数');
-      await repository(agent.session.header.cwd);
+      await repository(agent.session.header.cwd, config.repositoryRoot);
       if (config.engineCommand === join(engineDir, process.platform === 'win32' ? 'Scripts/code-review-graph.exe' : 'bin/code-review-graph') && !config.engineArgs.length) await prepareDefault(signal);
       const result = await visualize({ mode: 'full', format: 'html' }, agent, signal);
       return { kind: 'success', text: `图谱已生成 / Graph generated: ${result.path}${result.graph_update ? '\n解析警告 / Parse warnings: ' + JSON.stringify(result.graph_update) : ''}` };

@@ -22,14 +22,85 @@ export async function checkedPath(root: string, value: string, allowMissing = fa
   return canonical;
 }
 
-export async function repository(cwd: string | undefined): Promise<string> {
-  if (!cwd || !isAbsolute(cwd)) throw new Error('This session has no local absolute workspace');
-  const root = await realpath(cwd);
-  if (!(await stat(root)).isDirectory()) throw new Error('Workspace is not a directory');
-  for (const marker of ['.git', '.svn']) {
-    if (await stat(resolve(root, marker)).then(() => true, () => false)) return root;
+const REPOSITORY_MARKERS = ['.git', '.svn'] as const;
+/** Directories that never hold the workspace's own source, so scanning skips them. */
+const SCAN_SKIP = new Set(['node_modules', 'dist', 'build', 'out', 'target', 'bin', 'obj', '__pycache__', '.venv', 'venv', 'env', '.next', '.turbo', 'coverage']);
+const SCAN_DEPTH = 3;
+const SCAN_BUDGET = 2000;
+
+async function isRepositoryRoot(dir: string): Promise<boolean> {
+  for (const marker of REPOSITORY_MARKERS) {
+    if (await stat(resolve(dir, marker)).then(() => true, () => false)) return true;
   }
-  throw new Error('Select a Git or SVN repository before using the graph');
+  return false;
+}
+
+/**
+ * Repositories nested under a workspace that is not itself a repository, so a
+ * lab or monorepo-style root can still be analysed. A found repository is not
+ * descended into, and the walk is bounded by depth and a directory budget.
+ */
+async function nestedRepositories(root: string): Promise<string[]> {
+  const found: string[] = [];
+  let budget = SCAN_BUDGET;
+  let level = [root];
+  for (let depth = 0; depth < SCAN_DEPTH && level.length > 0 && budget > 0; depth += 1) {
+    const next: string[] = [];
+    for (const dir of level) {
+      if (budget <= 0) break;
+      budget -= 1;
+      if (await isRepositoryRoot(dir)) { found.push(dir); continue; }
+      for (const entry of await readdir(dir, { withFileTypes: true }).catch(() => [])) {
+        if (!entry.isDirectory() || entry.name.startsWith('.') || SCAN_SKIP.has(entry.name)) continue;
+        next.push(join(dir, entry.name));
+      }
+    }
+    level = next;
+  }
+  return found;
+}
+
+async function resolveRepository(cwd: string | undefined, configured?: string): Promise<string> {
+  if (configured !== undefined && configured !== '') {
+    if (!isAbsolute(configured)) throw new Error('repositoryRoot must be an absolute path');
+    const root = await realpath(configured).catch(() => { throw new Error(`repositoryRoot does not exist: ${configured}`); });
+    if (!(await stat(root)).isDirectory()) throw new Error(`repositoryRoot is not a directory: ${configured}`);
+    if (await isRepositoryRoot(root)) return root;
+    throw new Error(`repositoryRoot is not a Git or SVN repository: ${configured} (run git init there, or point it at the repository root)`);
+  }
+  if (!cwd || !isAbsolute(cwd)) throw new Error('This session has no local absolute workspace');
+  const start = await realpath(cwd);
+  if (!(await stat(start)).isDirectory()) throw new Error('Workspace is not a directory');
+  for (let current = start; ; current = dirname(current)) {
+    if (await isRepositoryRoot(current)) return current;
+    const parent = dirname(current);
+    if (parent === current) break;
+  }
+  const nested = await nestedRepositories(start);
+  if (nested.length === 1) return nested[0];
+  if (nested.length > 1) throw new Error(`Select a Git or SVN repository before using the graph: ${start} contains ${nested.length} repositories (${nested.join(', ')}); set repositoryRoot in the plugin config or open the session in one of them`);
+  throw new Error(`Select a Git or SVN repository before using the graph: ${start} is not inside a Git or SVN repository and no repository was found beneath it (open the session at a repository root, or run git init there)`);
+}
+
+const repositoryCache = new Map<string, Promise<string>>();
+
+/**
+ * Resolve the repository a session works on: an explicit `repositoryRoot` wins,
+ * then the nearest enclosing repository (git semantics), then the single
+ * repository nested under the workspace.
+ */
+export async function repository(cwd: string | undefined, configured?: string): Promise<string> {
+  const key = `${cwd ?? ''}\u0000${configured ?? ''}`;
+  const cached = repositoryCache.get(key);
+  if (cached !== undefined) return cached;
+  const pending = resolveRepository(cwd, configured);
+  repositoryCache.set(key, pending);
+  try {
+    return await pending;
+  } catch (error) {
+    repositoryCache.delete(key); // a later call may succeed after the workspace gains a repository
+    throw error;
+  }
 }
 
 export function scrubEnv(env: NodeJS.ProcessEnv): Record<string, string> {

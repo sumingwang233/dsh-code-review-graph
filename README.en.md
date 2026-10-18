@@ -4,11 +4,11 @@
 
 Native DeepSeek Harness tools and a Web/Desktop graph sidebar, powered by
 [Code Review Graph](https://github.com/tirth8205/code-review-graph) **2.3.9**.
-Preserves all 30 tools, five prompt workflows and seven skills. Version **1.0.4**
+Preserves all 30 tools, five prompt workflows and seven skills. Version **1.0.5**
 fixes the turn that failed in 1.0.3 whenever `crg_workflow` / `crg_prompt` revealed
 tools: their schema carried `required: undefined`, which DSH's lossless-JSON session
 log rejects. Tool count, workflows, skills and one-click engine setup are unchanged.
-See the [1.0.4 release notes](docs/release-1.0.4.md).
+See the [1.0.5 release notes](docs/release-1.0.5.md).
 
 Supports Windows, Linux and macOS, with exact DSH baselines **0.1.5-rc.2** and
 **0.2.0-rc.2**. Alpha compatibility is outside the contract.
@@ -18,13 +18,13 @@ Supports Windows, Linux and macOS, with exact DSH baselines **0.1.5-rc.2** and
 Install the published npm package:
 
 ```sh
-dsh plugin --profile web add dsh-code-review-graph@1.0.4
-npx dsh-code-review-graph@1.0.4 prepare
+dsh plugin --profile web add dsh-code-review-graph@1.0.5
+npx dsh-code-review-graph@1.0.5 prepare
 ```
 
 Use `headless` or another ordinary profile for the command-line entrance. Desktop
 profiles belong to the application: install through that release's native plugin
-manager, using `dsh-code-review-graph@1.0.4`, then click **Enable now**. Uninstall
+manager, using `dsh-code-review-graph@1.0.5`, then click **Enable now**. Uninstall
 0.1.x through the manager before upgrading. For an unconfirmed installation,
 first use **Check installation status**. See the [official DSH publishing guide](https://github.com/deepseek-ai/deepseek-harness/blob/dsh-v0.2.0-rc.2/docs/user/develop/basic/publish.md).
 
@@ -44,7 +44,7 @@ npm ci
 npm run typecheck
 npm run build
 npm pack
-dsh plugin --profile web add ./dsh-code-review-graph-1.0.4.tgz
+dsh plugin --profile web add ./dsh-code-review-graph-1.0.5.tgz
 node dist/setup.js prepare ../code-review-graph
 ```
 
@@ -189,25 +189,25 @@ default Desktop profile's installed manifest is:
 ```
 
 Its `version` is the installed version. The profile's own `package.json` records
-a range such as `^1.0.0`: that range permits 1.0.4 but does not prove an upgrade.
-Installation logs should also name 1.0.4 explicitly.
+a range such as `^1.0.0`: that range permits 1.0.5 but does not prove an upgrade.
+Installation logs should also name 1.0.5 explicitly.
 
 Official npm and npmmirror can have different `latest` versions. An unversioned
 package name may still resolve to an older release on a stale mirror. An `npm install` in an
 ordinary directory also does not update the application-owned Desktop profile.
 Remove the old version through the native manager, then install the exact spec
-`dsh-code-review-graph@1.0.4`. If your source lacks that version:
+`dsh-code-review-graph@1.0.5`. If your source lacks that version:
 
-1. Download `dsh-code-review-graph-1.0.4.tgz` from the
-   [v1.0.4 release](https://github.com/sumingwang233/dsh-code-review-graph/releases/tag/v1.0.4).
+1. Download `dsh-code-review-graph-1.0.5.tgz` from the
+   [v1.0.5 release](https://github.com/sumingwang233/dsh-code-review-graph/releases/tag/v1.0.5).
    Leave it compressed.
 2. Enter its **absolute path** in the native **Add plugin** package-address
-   field, for example `D:\Downloads\dsh-code-review-graph-1.0.4.tgz`, install it
+   field, for example `D:\Downloads\dsh-code-review-graph-1.0.5.tgz`, install it
    and choose **Enable now**.
-3. Confirm that the installed package's `version` is 1.0.4 and create a new
+3. Confirm that the installed package's `version` is 1.0.5 and create a new
    session. Do not modify the Desktop profile through an external CLI.
 
-If the installed file already says 1.0.4, refresh the manager's metadata by
+If the installed file already says 1.0.5, refresh the manager's metadata by
 reopening Desktop after saving your work. Use `prepare` for a missing engine;
 reinstalling the JavaScript plugin does not install the Python engine.
 
@@ -217,6 +217,12 @@ Model inputs cannot supply `repo_root`. Execution uses the session's canonical
 repository, checks traversal/symlink boundaries, and only allows cross-repository
 search over the current root plus user-configured `authorizedRepos`. Other roots
 must first be built in their own sessions.
+
+The repository root resolves in three steps: an explicit `repositoryRoot` (absolute path) from
+the plugin config wins; otherwise the nearest enclosing Git or SVN repository of the session
+workspace; otherwise the single repository nested under that workspace. When none is found, or
+several are, the error names the candidates instead of guessing. A lab layout such as
+`E:\REA-Lab` with repositories several levels down therefore works from the lab root.
 
 Non-preview `apply_refactor_tool` requests a complete read-only core edit plan,
 checks original byte hashes and native file intents, then commits through

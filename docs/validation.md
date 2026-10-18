@@ -1,5 +1,31 @@
 # Validation / 验证记录
 
+## 1.0.5 发行验证
+
+1.0.5 修复工作目录不是仓库时图谱工具拒绝工作的问题：仓库根改为「显式 `repositoryRoot`
+→ 最近祖先仓库 → 工作目录下唯一嵌套仓库」三级解析。本次在 Windows（Node 24）执行：
+
+- 类型检查与 Host/Client 构建通过（prepack）。
+- `npm test` 18 项全通过（新增 `tests/repository.test.mjs` 8 项）。
+- 红→绿对照：在 1.0.4 的构建产物上，「仓库子目录」「实验室根」两条用例失败；
+  `npm run build` 后 8/8 通过。
+- 本机真实工作区实测：`E:\REA-Lab` 解析到 `E:\REA-Lab\ClawsGO_REA\research-desk`；
+  该仓库自身解析到自身；`C:\Users\sumingwang\.dsh` 与 `E:\REA-Lab\winrea\workspace`
+  仍按预期拒绝（自身与祖先都不是仓库，且下方没有嵌套仓库）。
+- 真实 DSH 会话集成、Web/headless 安装生命周期、浏览器组件与 Desktop 整机测试本次未重跑。
+  发行包字节与 SHA-256 见 `docs/package-checks-1.0.5.json`。
+
+1.0.5 fixes graph tools refusing to run when the session workspace is not itself a repository:
+the repository root now resolves as explicit `repositoryRoot` → nearest enclosing repository
+→ the single repository nested under the workspace. On Windows (Node 24) this release ran
+typecheck + build and `npm test` (18/18, including the new `tests/repository.test.mjs` with
+8 cases), and recorded the red→green comparison: on the 1.0.4 bundle the subdirectory and lab
+cases fail. Real-world check on this machine: `E:\REA-Lab` resolves to
+`E:\REA-Lab\ClawsGO_REA\research-desk`; `C:\Users\sumingwang\.dsh` and
+`E:\REA-Lab\winrea\workspace` still fail as expected. Real DSH session integration, install
+lifecycle, browser and Desktop runs were not repeated. Package bytes and SHA-256 are recorded
+in `docs/package-checks-1.0.5.json`.
+
 ## 1.0.4 发行验证
 
 1.0.4 修复 1.0.3 的工具 schema 缺陷：`capabilities.json` 未声明 `required` 的工具在

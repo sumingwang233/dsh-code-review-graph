@@ -4,10 +4,10 @@
 
 面向 DeepSeek Harness 的原生代码图谱插件。复用 [Code Review Graph](https://github.com/tirth8205/code-review-graph)
 2.3.9 引擎，提供全部 30 个工具、5 个工作流 prompt、7 个技能，以及 Web／桌面侧栏交互图谱。
-当前版本为 **1.0.4**，修复 1.0.3 中 `crg_workflow` / `crg_prompt` 揭示工具后整轮会话失败的问题
+当前版本为 **1.0.5**，修复 1.0.3 中 `crg_workflow` / `crg_prompt` 揭示工具后整轮会话失败的问题
 （工具 schema 里出现 `required: undefined`，被 DSH 会话日志的无损 JSON 校验拒绝）；
 工具数量、工作流、技能与一键准备引擎均未改动。
-详见 [1.0.4 更新说明](docs/release-1.0.4.md)。
+详见 [1.0.5 更新说明](docs/release-1.0.5.md)。
 
 支持 Windows、Linux、macOS；兼容基线固定为 DSH **0.1.5-rc.2、0.2.0-rc.2**。
 Web 和命令行通过官方 CLI 安装，桌面版通过对应版本的原生插件管理器安装。Alpha 版本不在兼容承诺内。
@@ -17,12 +17,12 @@ Web 和命令行通过官方 CLI 安装，桌面版通过对应版本的原生�
 安装已发布的 npm 包：
 
 ```sh
-dsh plugin --profile web add dsh-code-review-graph@1.0.4
-npx dsh-code-review-graph@1.0.4 prepare
+dsh plugin --profile web add dsh-code-review-graph@1.0.5
+npx dsh-code-review-graph@1.0.5 prepare
 ```
 
 命令行入口将 `web` 替换为 `headless` 或你使用的普通 profile。
-桌面版在插件管理器中安装 `dsh-code-review-graph@1.0.4`，安装完成后点击“立即启用”。
+桌面版在插件管理器中安装 `dsh-code-review-graph@1.0.5`，安装完成后点击“立即启用”。
 已有 0.1.x 的用户先通过该管理器卸载旧版，再安装新版；尚未确认的安装先点击“核对安装状态”。
 桌面 profile 由应用持有，外部 CLI 不直接修改。
 参考 [DSH 官方打包指南](https://github.com/deepseek-ai/deepseek-harness/blob/dsh-v0.2.0-rc.2/docs/user/develop/basic/publish.md)。
@@ -40,7 +40,7 @@ npm ci
 npm run typecheck
 npm run build
 npm pack
-dsh plugin --profile web add ./dsh-code-review-graph-1.0.4.tgz
+dsh plugin --profile web add ./dsh-code-review-graph-1.0.5.tgz
 node dist/setup.js prepare ../code-review-graph
 ```
 
@@ -182,20 +182,20 @@ DSH 的两版基线均提供技能斜杠入口，见官方源码
 ```
 
 查看其中的 `version`；profile 自己的 `package.json` 只记录版本范围，例如 `^1.0.0`，
-该范围允许 1.0.4，但不能证明实际已经升级。安装日志也应明确记录 1.0.4。
+该范围允许 1.0.5，但不能证明实际已经升级。安装日志也应明确记录 1.0.5。
 
 官方 npm 的 `latest` 和 npmmirror 的 `latest` 可能不同。镜像未同步时，输入不带版本号的包名
 可能仍装到旧版；在普通目录执行 `npm install` 也不会更新应用持有的桌面 profile。
-使用桌面原生管理器卸载旧版，再安装明确的 `dsh-code-review-graph@1.0.4`。
+使用桌面原生管理器卸载旧版，再安装明确的 `dsh-code-review-graph@1.0.5`。
 若源里还没有这个版本，可按以下方式安装已验证的本地包：
 
-1. 从 [v1.0.4 发行页](https://github.com/sumingwang233/dsh-code-review-graph/releases/tag/v1.0.4)
-   下载 `dsh-code-review-graph-1.0.4.tgz`，无需解压。
+1. 从 [v1.0.5 发行页](https://github.com/sumingwang233/dsh-code-review-graph/releases/tag/v1.0.5)
+   下载 `dsh-code-review-graph-1.0.5.tgz`，无需解压。
 2. 在桌面管理器的“添加插件”包地址输入文件的**绝对路径**，例如
-   `D:\Downloads\dsh-code-review-graph-1.0.4.tgz`，完成安装并点击“立即启用”。
-3. 核对实际包的 `version` 为 1.0.4，再新建会话。不要用外部 CLI 修改 `desktop` profile。
+   `D:\Downloads\dsh-code-review-graph-1.0.5.tgz`，完成安装并点击“立即启用”。
+3. 核对实际包的 `version` 为 1.0.5，再新建会话。不要用外部 CLI 修改 `desktop` profile。
 
-如果实际包已经是 1.0.4，才考虑管理器元数据尚未刷新；保存当前工作后重新打开应用再核对。
+如果实际包已经是 1.0.5，才考虑管理器元数据尚未刷新；保存当前工作后重新打开应用再核对。
 引擎未准备的错误用前面的 `prepare` 解决，重新安装 JavaScript 插件不会自动安装 Python 引擎。
 
 ## 权限和重构
@@ -203,6 +203,11 @@ DSH 的两版基线均提供技能斜杠入口，见官方源码
 模型不能指定 `repo_root`，执行器使用会话的规范化仓库路径，拒绝目录越界和逃逸符号链接。
 `authorizedRepos` 默认为空；跨仓库查询只读取当前仓库及用户在 Host 配置中明确加入的仓库。
 其他仓库需要先在自己的会话中建图。
+
+仓库根按三级解析：插件配置的 `repositoryRoot`（绝对路径，显式指定）优先；否则取会话工作目录
+所在或最近的 Git／SVN 仓库；工作目录本身不是仓库时，取它下方唯一的一个嵌套仓库。找不到仓库或
+找到多个都会明确报错并列出候选，不会猜。像 `E:\REA-Lab` 这种「根目录下存放多个仓库」的布局，
+可以直接在根目录开会话，插件会自动落到 `E:\REA-Lab\ClawsGO_REA\research-desk`。
 
 `apply_refactor_tool` 的非预览操作先取得完整只读编辑计划，再通过 DSH 文件意图、会话策略和
 `ctx.fs` 提交。写入前校验原始字节 SHA-256，拒绝过期计划。逐文件原子写入，保留 UTF-8、BOM 和换行；
